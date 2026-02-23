@@ -1,0 +1,55 @@
+site_name: PyTheatreKontrol Documentation
+site_url: https://theatre-tools.github.io/PyTheatreKontrol/
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil 
+    view: material/eye
+    annotation: material/arrow-right-circle
+
+  features:
+    - content.action.view
+    - content.action.edit
+    - search.highlight
+    - search.suggest
+    - navigation.instant        # mini popups
+    - navigation.top            # sticky nav
+    - navigation.tracking       # highlights active page
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - content.tooltips
+    - content.code.annotate
+
+repo_url: https://github.com/theatre-tools/PyTheatreKontrol
+repo_name: theatre-tools/PyTheatreKontrol
+edit_uri: https://github.com/theatre-tools/PyTheatreKontrol/tree/main/docs/
+plugins:
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - git-committers:
+      repository: theatre-tools/PyTheatreKontrol
+      branch: main
+  - search
+
+
+extra:
+  version:
+    provider: mike
+    default: latest
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - abbr
+  - attr_list
+  - pymdownx.snippets:
+  - toc:
+      permalink: true
+  - md_in_html
+  - admonition
+  - pymdownx.details
+
+watch:
+  - docs
