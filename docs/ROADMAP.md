@@ -15,5 +15,4 @@
 
 - Expand support to other brands of lighting consoles.
 - Implement a more robust testing suite, including integration tests with actual consoles.
-
-
+- Develop a method for which users can easily create custom handlers for unsupported or custom OSC addresses without the need for another instance of pyopensoundcontrol.
