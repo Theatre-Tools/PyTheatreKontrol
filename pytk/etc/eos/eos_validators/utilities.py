@@ -1,7 +1,8 @@
 from oscparser import OSCString
 from pydantic import BaseModel, ValidationError
 
-class Ping_Validator(BaseModel):
+
+class PingValidator(BaseModel):
     address: str
     args: tuple[OSCString]
 
