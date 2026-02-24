@@ -8,7 +8,7 @@
 - Easy-to-use API for common commands.
 
 ## Roadmap
-Please refer to markdown file [ROADMAP.md](ROADMAP.md) for the project roadmap and future plans.
+Please refer to markdown file [ROADMAP.md](docs/ROADMAP.md) for the project roadmap and future plans.
 
 ## Console Support
 PyTK is designed to be flexible and the goal of this project is to support as many varietys of consoles as possible. I myself will be starting with support for the Eos family of consoles, but I hope to expand to other brands in the future. Given the constantly evolving nature of the consoles that this software interfaces with, it is likely that support for new consoles will be added on an as-needed basis, but I am always open to suggestions and contributions.
