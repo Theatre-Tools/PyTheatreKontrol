@@ -1,7 +1,7 @@
 # Project Roadmap
 
 ### Sub Roadmaps
-- [Eos Roadmap](docs/EOS_ROADMAP.md)
+- [Eos Roadmap](EOS_ROADMAP.md)
 
 
 ## Short-term Goals
