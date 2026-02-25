@@ -35,10 +35,14 @@ class EOS:
         message = OSCMessage(address="/eos/ping", args=(OSCString(value=ping_message),))
         response = self.caller.call(message=message, return_address="/eos/out/ping", validator=PingValidator)
         try:
+            if response is None:
+                raise RuntimeError("No response received for ping message.")
             if response and type(response.message) is str:
-                if response.message != ping_message:
+                if response.message != ping_message or response.message == None:
                     raise ValueError(f"Unexpected ping response message: {response.message}. Expected: {ping_message}")
                 return PingResponse(message=response.message)
 
         except Exception as e:
             raise RuntimeError(f"Error processing ping response: {e}")
+        
+    

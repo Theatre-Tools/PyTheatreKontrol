@@ -7,10 +7,9 @@ class PingValidator(BaseModel):
     args: tuple[OSCString]
 
     @property
-    def message(self) -> str | None:
+    def message(self) -> str:
         if self.args:
             try:
-                ## Get the value of the response argument
                 return self.args[0].value
             except (IndexError, AttributeError):
                 raise ValidationError("Invalid argument for ping message. Expected a string.")
