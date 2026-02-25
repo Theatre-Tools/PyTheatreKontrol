@@ -2,19 +2,30 @@
 This is where the roadmap for Eos family support can be found. Due to the scale of this project, it's important for me to plan and breakdown my development choices, and my priorities.
 
 ## Minimum Viable Product (MVP)
-- Basic Cue List TX/RX:
-    - Interrogate the console for information about cue list counts, cue counts, and cue details.
-    - Interrogate the console for information about active and pending cues, and handle those in the background with queues.
-    - Record Cues to the active Cue list, with properties like labels and fade times.
-    - Fire Cues on the active cue list.
-    - GoTo_Cue on the active cue list.
-- Basic Submaster TX/RX:
-    - Interrogate the console for information regarding submaster properties, fader levels, etc.
-    - Set submaster levels.
-- Basic Preset and Pallete RX/TX:
-    - Interrogate the console on information regarding recorded presets and palletes (Names, counts, fixture types, etc.)
-    - Interrogate the console for information regarding active presets and palletes.
-    - Record presets and palletes.
+- [ ] Basic Cue List TX/RX:
+    - [ ] Interrogate the console for information about cue list counts, cue counts, and cue details.
+    - [ ] Interrogate the console for information about active and pending cues, and handle those in the background with queues.
+    - [ ] Record Cues to the active Cue list, with properties like labels and fade times.
+    - [ ] Fire Cues on the active cue list.
+    - [ ] GoTo_Cue on the active cue list.
+- [ ] Basic Submaster TX/RX:
+    - [ ] Interrogate the console for information regarding submaster properties, fader levels, etc.
+    - [ ] Set submaster levels.
+- [ ] Basic Preset and Pallete RX/TX:
+    - [ ] Interrogate the console on information regarding recorded presets and palletes (Names, counts, fixture types, etc.)
+    - [ ] Interrogate the console for information regarding active presets and palletes.
+    - [ ] Record presets and palletes.
+- [ ] Basic Desk status and event support for common scenarios:
+    - [ ] Store the desks current lock state, and provide a method for checking that lock state before sending commands that require a certain lock state.
+    - [ ] Store whethe the desk is currently in Live, Blind or Staging modes.
+    - [ ] Implement event support for the following common actions:
+        - [ ] Cure fires
+        - [ ] Cue updates
+        - [ ] Cue records
+        - [ ] Lock state changes
+        - [ ] Mode changes (Live, Blind, Staging)
+        - [ ] File saves
+        - [x] Basic Method to ping the console and get a response, for diagnosing connection problems.
 
 
 ## Long term goals
