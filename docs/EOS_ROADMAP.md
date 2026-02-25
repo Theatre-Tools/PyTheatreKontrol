@@ -17,3 +17,9 @@ This is where the roadmap for Eos family support can be found. Due to the scale 
     - Record presets and palletes.
 
 
+## Long term goals
+- Implement event driven support for actions such as cue firing, submaster level changes, cue updates, file saves, etc.
+- Implement support for selecting groups and channels, and recording cues with those selections.
+- Implement setting executors on specific cues or submasters, or events.
+- Implement support for more complex cue properties such as follow, fade times, etc.
+- Implement support for more complex preset and pallete properties, such as fixture selections, etc.
