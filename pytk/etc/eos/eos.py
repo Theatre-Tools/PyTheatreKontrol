@@ -16,6 +16,8 @@ class EOS:
         framing: OSCFraming = OSCFraming.OSC11,
         bind_ip: Optional[str] = None,
         bind_port: Optional[int] = None,
+        keepalive: bool = False,
+        keepalive_interval: int = 120
 
     ):
         self.host = host
