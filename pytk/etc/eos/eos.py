@@ -15,8 +15,7 @@ class EOS:
         port: int = 3032,
         mode: OSCModes = OSCModes.TCP,
         framing: OSCFraming = OSCFraming.OSC11,
-        bind_ip: None = None,
-        bind_port: None = None,
+        *,
         keepalive: bool = False,
         keepalive_interval: int = 30
     ) -> None: ...
