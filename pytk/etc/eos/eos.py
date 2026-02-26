@@ -1,13 +1,38 @@
 from time import perf_counter_ns, sleep
-from typing import Optional
+from typing import Optional, overload
 
 from pyosc import CallHandler, OSCFraming, OSCMessage, OSCModes, OSCString, Peer
 
 from .eos_types import PingResponse
 from .eos_validators import PingValidator
 
-
-class EOS:    
+class EOS:
+        
+    @overload
+    def __init__(
+        self,
+        host: str,
+        port: int = 3032,
+        mode: OSCModes = OSCModes.TCP,
+        framing: OSCFraming = OSCFraming.OSC11,
+        bind_ip: None = None,
+        bind_port: None = None,
+        keepalive: bool = False,
+        keepalive_interval: int = 30
+    ) -> None: ...
+    
+    @overload
+    def __init__(
+        self,
+        host: str,
+        port: int = 8000,
+        mode: OSCModes = OSCModes.UDP,
+        framing: OSCFraming = OSCFraming.OSC10,
+        bind_ip: str = "0.0.0.0",
+        bind_port: int = 8001,
+    ) -> None: ...
+    
+    
     def __init__(
         self,
         host: str,
