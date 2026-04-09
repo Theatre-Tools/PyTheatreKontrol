@@ -1,4 +1,5 @@
-from .utilities import PingResponse, VersionResponse, VersionInfo
+from .ping import PingResponse
+from .version import VersionResponse, VersionInfo
 
 __all__ = [
     "PingResponse",

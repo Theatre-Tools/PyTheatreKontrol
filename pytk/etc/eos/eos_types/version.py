@@ -2,13 +2,6 @@ from dataclasses import dataclass
 
 
 @dataclass
-class PingResponse:
-    message: str
-    latency: float
-    
-
-
-@dataclass
 class VersionResponse:
     eos: 'VersionInfo'
     fixture_lib: 'VersionInfo'
