@@ -1,5 +1,7 @@
-from .utilities import PingResponse
+from .utilities import PingResponse, VersionResponse, VersionInfo
 
 __all__ = [
-    "PingResponse"
+    "PingResponse",
+    "VersionResponse",
+    "VersionInfo"
 ]
