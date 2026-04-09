@@ -1,3 +1,3 @@
-from .utilities import PingValidator
+from .utilities import PingValidator, VersionValidator
 
-__all__ = ["PingValidator"]
+__all__ = ["PingValidator", "VersionValidator"]
