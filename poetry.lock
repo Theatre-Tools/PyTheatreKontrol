@@ -1053,14 +1053,14 @@ extra = ["pygments (>=2.19.1)"]
 
 [[package]]
 name = "pyopensoundcontrol"
-version = "2.0.0b1"
+version = "2.0.0b3"
 description = "A package to add fully featured OSC support to python"
 optional = false
 python-versions = "<4.0.0,>=3.13"
 groups = ["main"]
 files = [
-    {file = "pyopensoundcontrol-2.0.0b1-py3-none-any.whl", hash = "sha256:f0fd8e398485ca7d743b17d09e6e8a10bc6e6ab23bce64450b078ebcbd6baf07"},
-    {file = "pyopensoundcontrol-2.0.0b1.tar.gz", hash = "sha256:53330b8863a6706524ea627f4ef714273e5aebbba599257edbc9723bc47a3a01"},
+    {file = "pyopensoundcontrol-2.0.0b3-py3-none-any.whl", hash = "sha256:6a0bc360aefbdab7f35de05acaf5c00089247241724b3b4da11cba9ff84938ea"},
+    {file = "pyopensoundcontrol-2.0.0b3.tar.gz", hash = "sha256:239cdf3ff186861ff9c6fb2e740de88c81032d3b4e50e6107f5d114397c03a66"},
 ]
 
 [package.dependencies]
@@ -1484,4 +1484,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "<4.0.0,>=3.13"
-content-hash = "26582ebe13261880c6747460464c789c4ba88f4e94ce968cccafdfe9a4cc8ef0"
+content-hash = "6725b04ddbfb96ade60f986d2d3bc0e5597b101c8999b1bd702a96413fecf707"
