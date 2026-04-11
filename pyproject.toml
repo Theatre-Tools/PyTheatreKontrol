@@ -10,7 +10,7 @@ license-files = ["LICENSE"]
 keywords = ["osc", "sound", "midi", "sockets", "transport", "Lighting", "Theatre"]
 requires-python = "<4.0.0,>=3.13"
 dependencies = [
-    "pyopensoundcontrol (>=2.0.0b3)",
+    "pyopensoundcontrol (>=2.0.0b5)",
     "pydantic (>=2.12.5,<3.0.0)"
 ]
 
