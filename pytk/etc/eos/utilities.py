@@ -74,7 +74,7 @@ class Utilities:
             info = self._eos.instance.call(
                 message=OSCMessage(address="/eos/get/processors", args=()),
                 return_address="/eos/out/get/processors",
-                responses=Processors,
+                max_responses=Processors,
                 validator=Processor_Info,
                 prefix=1,
             )
@@ -116,7 +116,7 @@ class Utilities:
         userlist = self._eos.instance.call(
             message=OSCMessage(address="/eos/get/userlist", args=()),
             return_address="/eos/out/get/userlist",
-            responses=1,
+            max_responses=1,
             validator=UserValidator,
         )
         if not isinstance(userlist, list) and userlist and isinstance(userlist.message.users, list):
