@@ -1,9 +1,7 @@
 from typing import Optional, overload
 
-from pyosc import OSCFraming, OSCMessage, OSCModes, OSCString, Peer
+from pyosc import OSCFraming, OSCModes, Peer
 
-from .eos_types import PingResponse, VersionResponse
-from .eos_validators import PingValidator
 from .utilities import Utilities
 
 
