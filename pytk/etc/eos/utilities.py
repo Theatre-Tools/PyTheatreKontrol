@@ -69,6 +69,7 @@ class Utilities:
 		)
 		if initial is not None and not isinstance(initial, list):
 			Processors = initial.message.num_processors
+			## Sleep briefly to allow EOS to finish responding to the last message.
 			time.sleep(0.2)
 			info = self._eos.instance.call(
 				message=OSCMessage(address="/eos/get/processors", args=()),
