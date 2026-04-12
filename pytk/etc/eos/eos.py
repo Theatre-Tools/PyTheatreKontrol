@@ -8,7 +8,6 @@ from .utilities import Utilities
 
 
 class EOS:
-        
     @overload
     def __init__(
         self,
@@ -18,9 +17,9 @@ class EOS:
         framing: OSCFraming = OSCFraming.OSC11,
         *,
         keepalive: bool = False,
-        keepalive_interval: int = 30
+        keepalive_interval: int = 30,
     ) -> None: ...
-    
+
     @overload
     def __init__(
         self,
@@ -31,8 +30,7 @@ class EOS:
         bind_ip: str = "0.0.0.0",
         bind_port: int = 8001,
     ) -> None: ...
-    
-    
+
     def __init__(
         self,
         host: str,
@@ -42,8 +40,7 @@ class EOS:
         bind_ip: Optional[str] = None,
         bind_port: Optional[int] = None,
         keepalive: bool = False,
-        keepalive_interval: int = 120
-
+        keepalive_interval: int = 120,
     ):
         self.host = host
         self.port = port
@@ -62,10 +59,7 @@ class EOS:
         self.instance = instance
         self.utilities = Utilities(self)
         self.instance.start_listening()
+
         @self.instance.event
         def on_exception(exception: Exception):
             print(f"OSC Peer Exception: {exception}")
-
-
-
-
