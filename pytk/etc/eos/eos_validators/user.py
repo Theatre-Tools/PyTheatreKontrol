@@ -19,14 +19,12 @@ class UserValidator(BaseModel):
         args = self.args
 
         valid_payload = len(args) % 4 == 0 and all(
-            isinstance(args[index], OSCInt) and args[index].value == 3
-            for index in range(0, len(args), 4)
+            isinstance(args[index], OSCInt) and args[index].value == 3 for index in range(0, len(args), 4)
         )
 
         if not valid_payload:
             raise ValueError(
-                "Invalid user list message. Expected repeating groups of: "
-                "(3, <user id>, <console type>, <console name>)."
+                "Invalid user list message. Expected repeating groups of: (3, <user id>, <console type>, <console name>)."
             )
 
         # Each user is represented by a chunk of 4 arguments: (3, <user id>, <console type>, <console name>)
@@ -49,4 +47,3 @@ class UserValidator(BaseModel):
                 )
             )
         return users
-
