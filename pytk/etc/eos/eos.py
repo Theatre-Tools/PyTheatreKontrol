@@ -1,10 +1,11 @@
-from time import perf_counter_ns, sleep
 from typing import Optional, overload
 
-from pyosc import CallHandler, OSCFraming, OSCMessage, OSCModes, OSCString, Peer
+from pyosc import OSCFraming, OSCMessage, OSCModes, OSCString, Peer
 
-from .eos_types import PingResponse
+from .eos_types import PingResponse, VersionResponse
 from .eos_validators import PingValidator
+from .utilities import Utilities
+
 
 class EOS:
         
@@ -50,32 +51,21 @@ class EOS:
         self.framing = framing
 
         if mode == OSCModes.TCP:
-            instance = Peer(host, port, mode=OSCModes.TCP, framing=framing)
+            try:
+                instance = Peer(host, port, mode=OSCModes.TCP, framing=framing)
+            except Exception as e:
+                raise RuntimeError(f"Error initializing TCP peer: {e}")
         elif mode == OSCModes.UDP:
             instance = Peer(host, port, mode=OSCModes.UDP, framing=framing, udp_rx_address=bind_ip, udp_rx_port=bind_port)  # type: ignore
         else:
             raise ValueError("Invalid mode. Must be either OSCModes.TCP or OSCModes.UDP.")
         self.instance = instance
-        self.caller = CallHandler(instance)
+        self.utilities = Utilities(self)
         self.instance.start_listening()
-
-    def ping(self, ping_message: str) -> PingResponse | None:
-        start_ns = perf_counter_ns()
-        message = OSCMessage(address="/eos/ping", args=(OSCString(value=ping_message),))
-        response = self.caller.call(message=message, return_address="/eos/out/ping", validator=PingValidator)
-        try:
-            if response is None:
-                raise RuntimeError("No response received for ping message.")
-            if response and type(response.message) is str:
-                if response.message != ping_message or response.message == None:
-                    raise ValueError(f"Unexpected ping response message: {response.message}. Expected: {ping_message}")
-                latency_ms = (perf_counter_ns() - start_ns) / 1_000_000.0
-                return PingResponse(message=response.message, latency=latency_ms)
-
-        except Exception as e:
-            raise RuntimeError(f"Error processing ping response: {e}")
+        @self.instance.event
+        def on_exception(exception: Exception):
+            print(f"OSC Peer Exception: {exception}")
 
 
-    
-        
-    
+
+
