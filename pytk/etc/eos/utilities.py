@@ -1,20 +1,13 @@
 from typing import TYPE_CHECKING
 import time
 
-from pyosc import OSCFalse, OSCMessage, OSCString, OSCTrue, OSCInt
+from pyosc import OSCMessage, OSCString
 
-from pytk.etc.eos.eos_types.ping import PingResponse
-from pytk.etc.eos.eos_types.processor import Processor, ProcResponse
-from pytk.etc.eos.eos_validators.ping import PingValidator
-from pytk.etc.eos.eos_validators.processor import Processor_Info, numProcessors
-
-
-from .eos_types import VersionInfo, VersionResponse
-from .eos_validators import VersionValidator
+from .eos_validators import PingValidator, numProcessors, Processor_Info, UserValidator, VersionValidator
+from .eos_types import VersionInfo, VersionResponse, User, UserListResponse, PingResponse, ProcResponse, Processor
 
 if TYPE_CHECKING:
 	from .eos import EOS
-
 
 class Utilities:
 	def __init__(self, eos: "EOS") -> None:
@@ -116,5 +109,28 @@ class Utilities:
 						) for item in info
 					]
 				)
-       
+	   
 			
+	def userinfo(self) -> UserListResponse | None:
+		userlist = self._eos.instance.call(
+			message=OSCMessage(address="/eos/get/userlist", args=()),
+			return_address="/eos/out/get/userlist",
+			responses=1,
+			validator=UserValidator
+		)
+		if not isinstance(userlist, list) and userlist and isinstance(userlist.message.users, list):
+			return UserListResponse(
+				users=[
+					User(
+						id=item.id,
+						console_type=item.console_type,
+						console_name=item.console_name
+					) for item in userlist.message.users
+				],
+				count=len(userlist.message.users)
+			)
+		#for item in userlist.message.users:
+		#	print(item)
+	def showinfo(self):
+		raise NotImplementedError("Show information retrieval is not yet implemented.")
+	
