@@ -130,8 +130,7 @@ class Utilities:
 				],
 				count=len(userlist.message.users)
 			)
-		#for item in userlist.message.users:
-		#	print(item)
+
 	def showinfo(self):
 		raise NotImplementedError("Show information retrieval is not yet implemented.")
 	
