@@ -2,6 +2,7 @@ from .ping import PingResponse
 from .version import VersionResponse, VersionInfo
 from .processor import Processor, ProcResponse
 from .user import User, UserListResponse
+from .show import ShowFile
 
 __all__ = [
     "PingResponse",
@@ -10,6 +11,6 @@ __all__ = [
     "Processor",
     "ProcResponse",
     "User",
-    "UserListResponse"
+    "UserListResponse",
+    "ShowFile",
 ]
-
