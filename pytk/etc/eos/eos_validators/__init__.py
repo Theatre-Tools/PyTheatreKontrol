@@ -3,7 +3,7 @@ from .version import VersionValidator
 from .processor import numProcessors, Processor_Info
 from .user import UserValidator
 from .show import FilePathValidator
-from .cue import ActiveCompletionValidator, ActiveCueValidator
+from .cue import ActiveCompletionValidator, ActiveCueValidator, PendingCueValidator
 
 __all__ = [
     "PingValidator",
@@ -14,4 +14,5 @@ __all__ = [
     "FilePathValidator",
     "ActiveCompletionValidator",
     "ActiveCueValidator",
+    "PendingCueValidator",
 ]

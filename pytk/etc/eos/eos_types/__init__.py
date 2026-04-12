@@ -3,7 +3,7 @@ from .version import VersionResponse, VersionInfo
 from .processor import Processor, ProcResponse
 from .user import User, UserListResponse
 from .show import ShowFile
-from .cue import ActiveQueueItem, Cue, Part
+from .cue import ActiveQueueItem, PendingQueueItem, Cue, Part
 
 
 __all__ = [
@@ -16,6 +16,7 @@ __all__ = [
     "UserListResponse",
     "ShowFile",
     "ActiveQueueItem",
+    "PendingQueueItem",
     "Cue",
     "Part",
 ]
