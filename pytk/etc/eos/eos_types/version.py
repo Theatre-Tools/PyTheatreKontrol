@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from enum import Enum
 
 @dataclass
 class VersionResponse:
@@ -14,3 +14,14 @@ class VersionInfo:
     patch: int
     build: int
     
+
+
+class FileTypeVersion(Enum):
+    ESF = 'ESF'
+    """Original Eos Showfile. Still supported, generally used for legacy compatability.
+    """
+    ESF2 = 'ESF2'
+    """Eos Showfile version 2. Introduced in Eos v2.9.0. Adds compression.
+    """
+    ESF3D = 'ESF3D'
+    """Eos Showfile version 3D. Introduced in Eos v3.0.0. Adds support for 3D information."""
