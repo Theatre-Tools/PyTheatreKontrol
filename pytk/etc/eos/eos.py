@@ -3,6 +3,7 @@ from typing import Optional, overload
 from pyosc import OSCFraming, OSCModes, Peer
 
 from .utilities import Utilities
+from .cue import Cues
 
 
 class EOS:
@@ -56,6 +57,7 @@ class EOS:
             raise ValueError("Invalid mode. Must be either OSCModes.TCP or OSCModes.UDP.")
         self.instance = instance
         self.utilities = Utilities(self)
+        self.cue = Cues(self)
         self.instance.start_listening()
 
         @self.instance.event
