@@ -15,5 +15,5 @@ class User:
 class UserListResponse:
 	"""Represents the parsed response from /eos/out/get/userlist."""
  
-	users: List[User] | User
+	users: List[User]
 	count: int
