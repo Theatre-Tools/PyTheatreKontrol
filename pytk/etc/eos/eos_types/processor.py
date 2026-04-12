@@ -2,10 +2,11 @@ from cProfile import label
 from dataclasses import dataclass
 from typing import List
 
+
 @dataclass
 class Processor:
     """Represents a processor in the Eos system."""
-    
+
     id: int
     """The Internal ID of the processor
     """
@@ -32,10 +33,12 @@ class Processor:
     """
     universe_string: str
     """The universe string of the processor"""
-    
+
+
 @dataclass
 class ProcResponse:
     """Represents the response from a request for processor information in the Eos system."""
+
     count: int
     """A count of all the proccessors assigned to the eos session
     """
