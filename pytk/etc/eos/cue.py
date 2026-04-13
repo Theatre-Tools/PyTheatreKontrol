@@ -11,7 +11,6 @@ class PendingQueue(Queue):
     def __init__(self) -> None:
         super().__init__()
 
-
 class ActiveQueue(Queue):
     def __init__(self) -> None:
         super().__init__()
@@ -31,27 +30,38 @@ class ActiveQueue(Queue):
             list=last_item.list,
             completion=completion
         ))
-
-
+        
 class Cues:    
-    
+        
     def __init__(self, eos: EOS) -> None:
         self._eos = eos
-        self.active = ActiveQueue()
-        self.pending = PendingQueue()
-       
+        self.active_queue = ActiveQueue()
+        self.pending_queue = PendingQueue()
+    
+    @property
+    def active(self) -> ActiveQueueItem | None:
+        if self.active_queue.empty():
+            return None
+        return self.active_queue.queue[-1]
+
+    @property
+    def pending(self) -> PendingQueueItem | None:
+        if self.pending_queue.empty():
+            return None
+        return self.pending_queue.queue[-1]
+
     def active_handler(self, message) -> None:
         if isinstance(message, ActiveCueValidator):
-            self.active.put(ActiveQueueItem(
+            self.active_queue.put(ActiveQueueItem(
                 number=message.number,
                 list=message.list,
                 completion=message.completion
             ))
         else:
-            self.active.completion(message.completion)
+            self.active_queue.completion(message.completion)
         
     def pending_handler(self, message) -> None:
-        self.pending.put(PendingQueueItem(
+        self.pending_queue.put(PendingQueueItem(
             number=message.number,
             list=message.list,
             part=message.part
