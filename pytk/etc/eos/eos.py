@@ -2,6 +2,8 @@ from typing import Optional, overload
 
 from pyosc import OSCFraming, OSCModes, Peer
 
+from .eos_types import ActiveQueueItem, PendingQueueItem
+
 from .utilities import Utilities
 from .cue import Cues
 
@@ -63,3 +65,13 @@ class EOS:
         @self.instance.event
         def on_exception(exception: Exception):
             print(f"OSC Peer Exception: {exception}")
+        
+        @property
+        def active_cue(self) -> ActiveQueueItem | None:
+            ## Proxy Method for the cue.active property
+            return self.cue.active
+        
+        @property
+        def pending_cue(self) -> PendingQueueItem | None:
+            ## Proxy Method for the cue.pending property
+            return self.cue.pending
