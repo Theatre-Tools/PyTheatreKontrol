@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from datetime import UTC
-from re import U
+
 
 @dataclass
 class Part:
@@ -17,7 +16,7 @@ class Part:
     CDelay: float
     BDelay: float
     Duration: float
-    
+
 
 @dataclass
 class Cue:
@@ -37,13 +36,15 @@ class Cue:
     BDelay: float
     Duration: float
     Parts: list[Part]
-    
+
+
 @dataclass
 class ActiveQueueItem:
     number: float
     list: float
     completion: float
-    
+
+
 @dataclass
 class PendingQueueItem:
     number: float

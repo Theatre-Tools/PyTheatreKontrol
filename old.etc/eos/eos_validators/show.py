@@ -1,7 +1,9 @@
-from pyosc import OSCString
 from datetime import datetime
-from ..eos_types.version import FileTypeVersion
+
 from pydantic import BaseModel
+from pyosc import OSCString
+
+from ..eos_types.version import FileTypeVersion
 
 
 class FilePathValidator(BaseModel):

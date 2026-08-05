@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from pyosc import OSCInt, OSCString, OSCTrue, OSCFalse
+from pyosc import OSCFalse, OSCInt, OSCString, OSCTrue
 
 
 class numProcessors(BaseModel):

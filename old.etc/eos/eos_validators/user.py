@@ -1,6 +1,7 @@
-from pydantic import BaseModel, model_validator
-from pyosc import OSCInt, OSCString
 from dataclasses import dataclass
+
+from pydantic import BaseModel
+from pyosc import OSCInt, OSCString
 
 
 @dataclass

@@ -1,10 +1,10 @@
-from typing import TYPE_CHECKING
 import time
+from typing import TYPE_CHECKING
 
 from pyosc import OSCMessage, OSCString
 
-from .eos_validators import PingValidator, numProcessors, Processor_Info, UserValidator, VersionValidator, FilePathValidator
-from .eos_types import VersionInfo, VersionResponse, User, UserListResponse, PingResponse, ProcResponse, Processor, ShowFile
+from .eos_types import PingResponse, Processor, ProcResponse, ShowFile, User, UserListResponse, VersionInfo, VersionResponse
+from .eos_validators import FilePathValidator, PingValidator, Processor_Info, UserValidator, VersionValidator, numProcessors
 
 if TYPE_CHECKING:
     from .eos import EOS
@@ -17,9 +17,9 @@ class Utilities:
     @property
     def version(self) -> VersionResponse | None:
         message = OSCMessage(address="/eos/get/version", args=())
-        response = self._eos.instance.call(
+        response = self._eos.instance.callHandler.call(
             message=message,
-            return_address="/eos/out/get/version",
+            message_return_address="/eos/out/get/version",
             validator=VersionValidator,
         )
         try:
@@ -49,7 +49,9 @@ class Utilities:
 
     def ping(self, ping_message: str = "PyShowControl") -> PingResponse | None:
         message = OSCMessage(address="/eos/ping", args=(OSCString(value=ping_message),))
-        response = self._eos.instance.call(message=message, return_address="/eos/out/ping", validator=PingValidator)
+        response = self._eos.instance.callHandler.call(
+            message=message, message_return_address="/eos/out/ping", validator=PingValidator
+        )
         try:
             if response is None:
                 raise RuntimeError("No response received for ping message.")
@@ -62,21 +64,20 @@ class Utilities:
             raise RuntimeError(f"Error processing ping response: {e}")
 
     def processors(self) -> ProcResponse | None:
-        initial = self._eos.instance.call(
+        initial = self._eos.instance.callHandler.call(
             message=OSCMessage(address="/eos/get/processors", args=()),
-            return_address="/eos/out/get/processors",
+            message_return_address="/eos/out/get/processors",
             validator=numProcessors,
         )
         if initial is not None and not isinstance(initial, list):
             Processors = initial.message.num_processors
             ## Sleep briefly to allow EOS to finish responding to the last message.
             time.sleep(0.2)
-            info = self._eos.instance.call(
+            info = self._eos.instance.callHandler.call(
                 message=OSCMessage(address="/eos/get/processors", args=()),
-                return_address="/eos/out/get/processors",
+                message_return_address="/eos/out/get/processors",
                 max_responses=Processors,
                 validator=Processor_Info,
-                prefix=1,
             )
             if info is not None and not isinstance(info, list):
                 return ProcResponse(
@@ -113,9 +114,9 @@ class Utilities:
                 )
 
     def userinfo(self) -> UserListResponse | None:
-        userlist = self._eos.instance.call(
+        userlist = self._eos.instance.callHandler.call(
             message=OSCMessage(address="/eos/get/userlist", args=()),
-            return_address="/eos/out/get/userlist",
+            message_return_address="/eos/out/get/userlist",
             max_responses=1,
             validator=UserValidator,
         )
@@ -129,9 +130,9 @@ class Utilities:
             )
 
     def showinfo(self) -> ShowFile | None:
-        showfileinfo = self._eos.instance.call(
+        showfileinfo = self._eos.instance.callHandler.call(
             message=OSCMessage(address="/eos/get/show/path", args=()),
-            return_address="/eos/out/get/show/path",
+            message_return_address="/eos/out/get/show/path",
             validator=FilePathValidator,
         )
         if showfileinfo is not None and not isinstance(showfileinfo, list):

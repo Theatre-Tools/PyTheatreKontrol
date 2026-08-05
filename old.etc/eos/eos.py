@@ -1,11 +1,10 @@
-from typing import Optional, overload
+from typing import overload
 
-from pyosc import OSCFraming, OSCModes, Peer
+from pyosc import OSCFraming, OSCTransport, Peer
 
-from .eos_types import ActiveQueueItem, PendingQueueItem
-
-from .utilities import Utilities
 from .cue import Cues
+from .eos_types import ActiveQueueItem, PendingQueueItem
+from .utilities import Utilities
 
 
 class EOS:
@@ -14,7 +13,7 @@ class EOS:
         self,
         host: str,
         port: int = 3032,
-        mode: OSCModes = OSCModes.TCP,
+        mode: OSCTransport = OSCTransport.TCP,
         framing: OSCFraming = OSCFraming.OSC11,
         *,
         keepalive: bool = False,
@@ -26,7 +25,7 @@ class EOS:
         self,
         host: str,
         port: int = 8000,
-        mode: OSCModes = OSCModes.UDP,
+        mode: OSCTransport = OSCTransport.UDP,
         framing: OSCFraming = OSCFraming.OSC10,
         bind_ip: str = "0.0.0.0",
         bind_port: int = 8001,
@@ -36,10 +35,10 @@ class EOS:
         self,
         host: str,
         port: int = 3032,
-        mode: OSCModes = OSCModes.TCP,
+        mode: OSCTransport = OSCTransport.TCP,
         framing: OSCFraming = OSCFraming.OSC11,
-        bind_ip: Optional[str] = None,
-        bind_port: Optional[int] = None,
+        bind_ip: str = "0.0.0.0",
+        bind_port: int = 8001,
         keepalive: bool = False,
         keepalive_interval: int = 120,
     ):
@@ -48,15 +47,22 @@ class EOS:
         self.mode = mode
         self.framing = framing
 
-        if mode == OSCModes.TCP:
+        if mode == OSCTransport.TCP:
             try:
-                instance = Peer(host, port, mode=OSCModes.TCP, framing=framing)
+                instance = Peer(remote_address=host, remote_port=port, transport=OSCTransport.TCP, framing=framing)
             except Exception as e:
                 raise RuntimeError(f"Error initializing TCP peer: {e}")
-        elif mode == OSCModes.UDP:
-            instance = Peer(host, port, mode=OSCModes.UDP, framing=framing, udp_rx_address=bind_ip, udp_rx_port=bind_port)  # type: ignore
+        elif mode == OSCTransport.UDP:
+            instance = Peer(
+                remote_address=host,
+                remote_port=port,
+                transport=OSCTransport.UDP,
+                framing=framing,
+                bind_ip=bind_ip,
+                bind_port=bind_port,
+            )
         else:
-            raise ValueError("Invalid mode. Must be either OSCModes.TCP or OSCModes.UDP.")
+            raise ValueError("Invalid mode. Must be either OSCTransport.TCP or OSCTransport.UDP.")
         self.instance = instance
         self.utilities = Utilities(self)
         self.cue = Cues(self)
@@ -65,12 +71,12 @@ class EOS:
         @self.instance.event
         def on_exception(exception: Exception):
             print(f"OSC Peer Exception: {exception}")
-        
+
         @property
         def active_cue(self) -> ActiveQueueItem | None:
             ## Proxy Method for the cue.active property
             return self.cue.active
-        
+
         @property
         def pending_cue(self) -> PendingQueueItem | None:
             ## Proxy Method for the cue.pending property
