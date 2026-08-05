@@ -4,7 +4,7 @@ class PyTKError(Exception):
     pass
 
 
-class UnsupportedFeatureError(PyTKError):
+class UnsupportedCapabilityError(PyTKError):
     """Raised when a feature is not supported by a device."""
 
     pass
