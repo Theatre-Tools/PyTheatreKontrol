@@ -1,11 +1,12 @@
-# Python Theatre Kontrol (PTK)
+# Python Theatre Kontrol (PyTK)
 **A Python framework for controlling theatre and live events equipment over a variety of protocols.**
 
 ## Features
 
-- Send and receive commands to a variety of show equipment leveraging multiple control protocols.
-- Maintain compatibility with a wide range of brands and equipment.
-- Standardise the communication, a go command here should be a go command there.
+- Provide a consistent interface for controlling show equipment across multiple protocols and manufacturers.
+- Enable compatibility with a wide range of brands and equipment through modular device drivers.
+- Standardise control operations across platforms — a Go command here should be a Go command there.
+- Keep device-specific logic within drivers, allowing the core library to remain hardware agnostic.
 - Make it easy to add support, standardise the library, make device support a driver, not the library itself.
 
 I want to build a family of support leveraging drivers to control a huge range of equipment, I want it to be quick and easy to build drivers to add support for hardware that fits into a supported category.
@@ -18,9 +19,9 @@ Please refer to markdown file [ROADMAP.md](docs/ROADMAP.md) for the project road
 My goal is to
 1) Support as much as possible, from projectors to consoles, to from sound to AV, with standardised support everywhere.
 2) Make it easy to add support, leveraging python Protocols to build device drivers
-3) Make it simple to migrate from one platform to another, a projector swap shouldn't necessitate rewriting half your software, all it should need is the change of a variable to load a different drive (Assuming that both pieces of hardware have the same capabilities)
+3) Make it simple to migrate from one platform to another, a projector swap shouldn't necessitate rewriting half your software, all it should need is the change of a variable to load a different driver (Assuming that both pieces of hardware have the same capabilities)
 
-In an ideal world, it shouldn't matter if you are using OSC, TCP, Serial, or a carrier Pidgeon, the command should be the same from a user perspective. 
+In an ideal world, it shouldn't matter if you are using OSC, TCP, Serial, or a carrier pigeon, the command should be the same from a user perspective. 
 
 ## Feature requests
 If you have any feature requests or suggestions, please feel free to open an issue on our GitHub repository. I will be prioritising features based on my requirements and user feedback, so your input is highly valuable.
