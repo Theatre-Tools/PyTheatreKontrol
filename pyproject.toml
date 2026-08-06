@@ -61,6 +61,10 @@ select = ["E4", "E7", "E9", "W1", "W2", "F", "RUF", "I"]
 [tool.ruff]
 line-length = 127
 
+[tool.ruff.lint.isort]
+known-first-party = ["pytk"]
+combine-as-imports = true
+
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
