@@ -5,16 +5,19 @@ from enum import Enum
 
 class State(Enum):
     """The Connection state of a device."""
+
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
     CONNECTED = "connected"
     ERROR = "error"
+
 
 @dataclass(slots=True)
 class DeviceState:
     """
     A common state that every PyTK compatible device should be expcted to have. This state is used to track the connection state of a device and the last time it was reached.
     """
+
     connection: State = State.DISCONNECTED
     online: bool = False
     last_seen: datetime | None = None
