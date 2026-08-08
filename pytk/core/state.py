@@ -20,6 +20,7 @@ class DeviceState:
 
     connection: State = State.DISCONNECTED
     online: bool = False
+    healthy: bool = False
     last_seen: datetime | None = None
     last_error: Exception | None = None
 
