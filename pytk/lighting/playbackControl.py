@@ -1,7 +1,7 @@
 from typing import Optional, Protocol
 
 
-class PlaybackControl(Protocol):
+class playbackControl(Protocol):
     """A protocol for controlling the playback state of a device."""
 
     async def go(self, cue: Optional[int | float] = None) -> None:
