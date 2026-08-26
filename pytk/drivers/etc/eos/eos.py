@@ -1,10 +1,11 @@
-from pyosc import ConnectionRole, OSCFloat, OSCFraming, OSCMessage, OSCTransport, Peer
+from pyosc import ConnectionRole, OSCFloat, OSCFraming, OSCMessage, OSCString, OSCTransport, Peer
 
 from pytk.core.device import Device
-from pytk.lighting.playbackControl import PlaybackControl
+from pytk.lighting.cueControl import cueControl
+from pytk.lighting.playbackControl import playbackControl
 
 
-class Eos(Device, PlaybackControl):
+class Eos(Device, playbackControl):
     """A device that implements the Eos protocol."""
 
     def __init__(
@@ -33,7 +34,7 @@ class Eos(Device, PlaybackControl):
         self.conn.stop_listening()
 
 
-class EosPlaybackControl(PlaybackControl):
+class EosPlaybackControl(playbackControl):
     """A class that implements the PlaybackControl protocol for Eos devices."""
 
     def __init__(self, _eos: Eos):
@@ -55,3 +56,18 @@ class EosPlaybackControl(PlaybackControl):
     async def stop(self) -> None:
         """Stop the transition of the current cue or go back to the previous cue."""
         self._eos.conn.send_message(OSCMessage(address="/eos/cues/stop", args=()))
+
+
+class EosCueControl(cueControl):
+    """A class that implements the CueControl protocol for Eos devices."""
+
+    def __init__(self, _eos: Eos):
+        self._eos = _eos
+
+    async def goto_cue(self, cue: str) -> None:
+        """Go to a specific cue."""
+        self._eos.conn.send_message(OSCMessage(address=f"/eos/cues/{cue}/fire", args=()))
+
+    async def record_cue(self, cue: str) -> None:
+        """Record a specific cue."""
+        self._eos.conn.send_message(OSCMessage(address="/eos/cmd", args=(OSCString(value=f"Record Cue {cue}"),)))
