@@ -30,3 +30,4 @@ The following commands are the minimum required for a device to be eligible for 
 - [ ] Basic Channel Control (Intensity)
 - [ ] Basic Address Control (0–255 & 0%–100%)
 - [ ] Drop Channel from the Programmer (return to the next layer of the desk)
+- [ ] Clear the programmer (Sneak on Eos, Clear on Chamsys Magic Q & Avolitse Titan)
