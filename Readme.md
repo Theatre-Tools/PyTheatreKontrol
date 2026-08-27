@@ -11,6 +11,9 @@
 
 I want to build a family of support leveraging drivers to control a huge range of equipment, I want it to be quick and easy to build drivers to add support for hardware that fits into a supported category.
 
+### A quick note on vocabulary
+This library, at least the lighting framework, uses ETC Eos vocabulary under the hood, that's because that's what I programme on most, so like a first language, my brain thinks in eos syntax primarily. Hopefully that isn't too confusing, and I hope to find better descriptors where required in the future.
+
 
 ## Roadmap
 Please refer to markdown file [ROADMAP.md](docs/ROADMAP.md) for the project roadmap and future plans.
