@@ -1,8 +1,8 @@
-from pyosc import ConnectionRole, OSCFloat, OSCFraming, OSCMessage, OSCString, OSCTransport, Peer
+from pyosc import ConnectionRole, OSCFraming, OSCMessage, OSCString, OSCTransport, Peer
 
 from pytk.core.device import Device
-from pytk.lighting.cueControl import cueControl
-from pytk.lighting.playbackControl import playbackControl
+from pytk.lighting.controls.cueControl import cueControl
+from pytk.lighting.controls.playbackControl import playbackControl
 
 from .eosPlaybackControl import EosPlaybackControl
 
@@ -34,8 +34,6 @@ class Eos(Device, playbackControl):
     async def disconnect(self) -> None:
         """Disconnect from the Eos device."""
         self.conn.stop_listening()
-
-
 
 
 class EosCueControl(cueControl):

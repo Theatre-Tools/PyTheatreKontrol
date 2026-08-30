@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
-from pyosc import OSCMessage, OSCFloat
 
-from pytk.lighting.playbackControl import playbackControl
+from pyosc import OSCFloat, OSCMessage
+
+from pytk.lighting.controls.playbackControl import playbackControl
 
 if TYPE_CHECKING:
     from .eos import Eos
