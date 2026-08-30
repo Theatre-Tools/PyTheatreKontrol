@@ -11,3 +11,7 @@ class playbackControl(Protocol):
     async def stop(self) -> None:
         """Stop transition of the current cue, or go back to the previous cue."""
         ...
+
+    async def goto_cue(self, cue: str) -> None:
+        """Go to a specific cue."""
+        ...
