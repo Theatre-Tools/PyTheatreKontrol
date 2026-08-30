@@ -27,7 +27,13 @@ The following commands are the minimum required for a device to be eligible for 
 
 The following commands are the minimum required for a device to be eligible for the `ProgrammerControl` class.
 
+- [ ] Drop Channel from the Programmer (return to the next layer of the desk)
+- [ ] Clear the programmer (Sneak on Eos, Clear on Chamsys Magic Q & Avolites Titan)
+
+### Lighting Device Control
+
+Lighting device control varies massively from desk to desk, so these are desk specific functions. As a result there will be no standard desk functions at a framework level.
+
+
 - [ ] Basic Channel Control (Intensity)
 - [ ] Basic Address Control (0–255 & 0%–100%)
-- [ ] Drop Channel from the Programmer (return to the next layer of the desk)
-- [ ] Clear the programmer (Sneak on Eos, Clear on Chamsys Magic Q & Avolitse Titan)
