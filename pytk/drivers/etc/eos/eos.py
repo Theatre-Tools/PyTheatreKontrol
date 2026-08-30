@@ -1,8 +1,8 @@
 from pyosc import ConnectionRole, OSCFraming, OSCMessage, OSCString, OSCTransport, Peer
 
 from pytk.core.device import Device
-from pytk.lighting.controls.cueControl import cueControl
-from pytk.lighting.controls.playbackControl import playbackControl
+from pytk.lighting.control.cueControl import cueControl
+from pytk.lighting.control.playbackControl import playbackControl
 
 from .eosPlaybackControl import EosPlaybackControl
 

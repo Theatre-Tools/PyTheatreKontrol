@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from pyosc import OSCFloat, OSCMessage
 
-from pytk.lighting.controls.playbackControl import playbackControl
+from pytk.lighting.control.playbackControl import playbackControl
 
 if TYPE_CHECKING:
     from .eos import Eos
