@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from pyosc import OSCFloat, OSCMessage
+from pyosc import OSCFloat, OSCInt, OSCMessage
 
 from pytk.lighting.control.playbackControl import playbackControl
 
@@ -30,3 +30,10 @@ class EosPlaybackControl(playbackControl):
     async def stop(self) -> None:
         """Stop the transition of the current cue or go back to the previous cue."""
         self._eos.conn.send_message(OSCMessage(address="/eos/cues/stop", args=()))
+
+    async def goto_cue(self, cue: int | float) -> None:
+        """Go to a specific cue."""
+        if isinstance(cue, float):
+            self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=(OSCFloat(value=cue),)))
+        else:
+            self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=(OSCInt(value=cue),)))
