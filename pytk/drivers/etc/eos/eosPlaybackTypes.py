@@ -151,3 +151,11 @@ class eosActiveCueValidator(BaseModel):
             return int(self.address.split("/")[5])
         except (IndexError, ValueError) as e:
             raise ValueError(f"Invalid address: {self.address}") from e
+
+    @property
+    def completion(self) -> float:
+        """Returns the current time within the active cue."""
+        try:
+            return self.args[0].value
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Invalid args: {self.args}") from e
