@@ -1,7 +1,7 @@
 from enum import Enum
 
 from pydantic import BaseModel
-from pyosc import OSCString
+from pyosc import OSCString, OSCFloat
 
 
 class eosPlaybackStates(BaseModel):
@@ -74,7 +74,6 @@ class eosPlaybackEventValidator(BaseModel):
 class eosCuePendingValidator(BaseModel):
     """A class to validate the pending cue event from the Eos device."""
 
-    args: tuple[OSCString]
     address: str
 
     @property
@@ -113,3 +112,40 @@ class cueType(BaseModel):
     """The part number. This is optional and can be None if not applicable."""
 
     """Here are the optional ones"""
+
+
+class eosActiveCueCompletionValidator(BaseModel):
+    """Takes in a message from /eos/out/active/cue and returns the current completion (decimal) within the cue fade."""
+
+    args: tuple[OSCFloat]
+
+    @property
+    def completion(self) -> float:
+        """Returns the current time within the active cue."""
+        try:
+            return self.args[0].value
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Invalid args: {self.args}") from e
+
+
+class eosActiveCueValidator(BaseModel):
+    """`/eos/out/active/cue/*/* ` - Returns the current active cue and part number."""
+
+    address: str
+    args: tuple[OSCFloat]
+
+    @property
+    def cue(self) -> int | float:
+        """Returns the current active cue number."""
+        try:
+            return int(self.address.split("/")[6])
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Invalid address: {self.address}") from e
+
+    @property
+    def cue_list(self) -> int | float:
+        """Returns the current active cue list number."""
+        try:
+            return int(self.address.split("/")[5])
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Invalid address: {self.address}") from e
