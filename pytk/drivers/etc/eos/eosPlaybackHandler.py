@@ -22,7 +22,11 @@ class eosPlaybackHandler:
 
     def handle_playback_event(
         self,
-        message: eosPlaybackEventValidator | eosActiveCueCompletionValidator | eosActiveCueValidator | eosCuePendingValidator | OSCMessage,
+        message: eosPlaybackEventValidator
+        | eosActiveCueCompletionValidator
+        | eosActiveCueValidator
+        | eosCuePendingValidator
+        | OSCMessage,
     ) -> None:
         """Handle playback events from the Eos device."""
 
@@ -34,13 +38,11 @@ class eosPlaybackHandler:
 
         elif isinstance(message, eosCuePendingValidator):
             """Update the pending cue value when a new pending cue is received."""
-            print('pending cue', message.cue)
             self.eos.playback.pending_cue = message.cue
 
         elif isinstance(message, eosPlaybackEventValidator):
             """Update the playback state when a new playback event is received."""
             if message.event_type == eventTypes.CUE_FIRE:
-                print('cue fired', message.cue)
                 self.eos.playback.last_cue = self.eos.playback.active_cue
                 self.eos.playback.active_cue = message.cue
                 self.eos.playback.running = True
@@ -52,5 +54,4 @@ class eosPlaybackHandler:
                 self.eos.playback.stopped = False
 
             else:
-                raise InvalidStateError(
-                    f"Invalid playback event type: {message.event_type}")
+                raise InvalidStateError(f"Invalid playback event type: {message.event_type}")
