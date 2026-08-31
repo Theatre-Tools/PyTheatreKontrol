@@ -1,7 +1,7 @@
 from enum import Enum
 
 from pydantic import BaseModel
-from pyosc import OSCString, OSCFloat
+from pyosc import OSCFloat, OSCString
 
 
 class eosPlaybackStates(BaseModel):
@@ -20,6 +20,8 @@ class eosPlaybackStates(BaseModel):
     """Indicates whether or not there is a fade between cues in progress"""
     stopped: bool = False
     """Indicates whether or not the fade between cues has been stopped. This is only relevant if `running` is True."""
+    completion: float | None = None
+    """The current completion of the fade between cues. This is a float between 0.0 and 1.0, where 0.0 is the start of the fade and 1.0 is the end of the fade. This is only relevant if `running` is True."""
 
 
 class eventTypes(Enum):
