@@ -1,50 +1,56 @@
 from typing import TYPE_CHECKING
 
+from pyosc import OSCMessage
+
 from pytk.core.exceptions import InvalidStateError
+
+from .eosPlaybackTypes import (
+    eosActiveCueCompletionValidator,
+    eosActiveCueValidator,
+    eosCuePendingValidator,
+    eosPlaybackEventValidator,
+    eventTypes,
+)
 
 if TYPE_CHECKING:
     from .eos import Eos
-    from .eosPlaybackTypes import (
-        eosActiveCueCompletionValidator,
-        eosActiveCueValidator,
-        eosCuePendingValidator,
-        eosPlaybackEventValidator,
-        eventTypes,
-    )
 
 
-class EosPlaybackHandler:
+class eosPlaybackHandler:
     def __init__(self, eos: Eos):
         self.eos = eos
 
-    async def handle_playback_event(
+    def handle_playback_event(
         self,
-        event: eosPlaybackEventValidator | eosActiveCueCompletionValidator | eosActiveCueValidator | eosCuePendingValidator,
+        message: eosPlaybackEventValidator | eosActiveCueCompletionValidator | eosActiveCueValidator | eosCuePendingValidator | OSCMessage,
     ) -> None:
         """Handle playback events from the Eos device."""
 
-        if isinstance(event, eosActiveCueCompletionValidator):
+        if isinstance(message, eosActiveCueCompletionValidator):
             """Updates the Cue Completion when a new message is received."""
-            if event.completion == 1.0:
+            if message.completion == 1.0:
                 self.eos.playback.running = False
-            self.eos.playback.completion = event.completion
+            self.eos.playback.completion = message.completion
 
-        elif isinstance(event, eosCuePendingValidator):
+        elif isinstance(message, eosCuePendingValidator):
             """Update the pending cue value when a new pending cue is received."""
-            self.eos.playback.pending_cue = event.cue
+            print('pending cue', message.cue)
+            self.eos.playback.pending_cue = message.cue
 
-        elif isinstance(event, eosPlaybackEventValidator):
+        elif isinstance(message, eosPlaybackEventValidator):
             """Update the playback state when a new playback event is received."""
-            if event.event_type == eventTypes.CUE_FIRE:
+            if message.event_type == eventTypes.CUE_FIRE:
+                print('cue fired', message.cue)
                 self.eos.playback.last_cue = self.eos.playback.active_cue
-                self.eos.playback.active_cue = event.cue
+                self.eos.playback.active_cue = message.cue
                 self.eos.playback.running = True
 
-            elif event.event_type == eventTypes.CUE_STOP:
+            elif message.event_type == eventTypes.CUE_STOP:
                 self.eos.playback.stopped = True
 
-            elif event.event_type == eventTypes.CUE_RESUME:
+            elif message.event_type == eventTypes.CUE_RESUME:
                 self.eos.playback.stopped = False
 
             else:
-                raise InvalidStateError(f"Invalid playback event type: {event.event_type}")
+                raise InvalidStateError(
+                    f"Invalid playback event type: {message.event_type}")
