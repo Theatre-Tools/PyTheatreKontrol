@@ -6,8 +6,8 @@ class Device(ABC):
         self.device_id = device_id
         self.name = name
 
-    async def connect(self):
+    def connect(self):
         pass
 
-    async def disconnect(self):
+    def disconnect(self):
         pass
