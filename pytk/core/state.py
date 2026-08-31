@@ -15,7 +15,7 @@ class State(Enum):
 @dataclass(slots=True)
 class DeviceState:
     """
-    A common state that every PyTK compatible device should be expcted to have. This state is used to track the connection state of a device and the last time it was reached.
+    A common state that every PyTK compatible device should be expected to have. This state is used to track the connection state of a device and the last time it was reached.
     """
 
     connection: State = State.DISCONNECTED
