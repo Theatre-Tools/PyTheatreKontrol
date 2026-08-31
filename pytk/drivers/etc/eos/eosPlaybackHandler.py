@@ -55,3 +55,5 @@ class eosPlaybackHandler:
 
             else:
                 raise InvalidStateError(f"Invalid playback event type: {message.event_type}")
+        else:
+            raise InvalidStateError(f"Invalid playback event message type: {type(message)}")
