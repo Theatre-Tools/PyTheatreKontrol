@@ -8,10 +8,10 @@ class playbackControl(Protocol):
         """Fire the next cue"""
         ...
 
-    async def stop(self) -> None:
+    def stop(self) -> None:
         """Stop transition of the current cue, or go back to the previous cue."""
         ...
 
-    async def goto_cue(self, cue: int | float) -> None:
+    def goto_cue(self, cue: int | float) -> None:
         """Go to a specific cue."""
         ...
