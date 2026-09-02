@@ -14,18 +14,9 @@ class EosPlaybackControl(playbackControl):
     def __init__(self, _eos: Eos):
         self._eos = _eos
 
-    async def go(self, cue: int | float | None = None) -> None:
-        """Fire the next cue in the active cue list unless a cue is provided
-
-        Args:
-            cue (int | float | None, optional): Cue to fire. Defaults to None.
-        """
-        if not cue:
-            # Fire the next cue in the active cue list
-            self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=()))
-        else:
-            # Fire a specific cue
-            self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=(OSCFloat(value=cue),)))
+    def go(self) -> None:
+        """Fire the next cue in the active cue list"""
+        self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=()))
 
     async def stop(self) -> None:
         """Stop the transition of the current cue or go back to the previous cue."""
@@ -34,6 +25,7 @@ class EosPlaybackControl(playbackControl):
     async def goto_cue(self, cue: int | float) -> None:
         """Go to a specific cue."""
         if isinstance(cue, float):
-            self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=(OSCFloat(value=cue),)))
+            arg = OSCFloat(value=cue)
         else:
-            self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=(OSCInt(value=cue),)))
+            arg = OSCInt(value=cue)
+        self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=(arg,)))
