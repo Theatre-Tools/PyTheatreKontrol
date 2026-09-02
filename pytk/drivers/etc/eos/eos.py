@@ -1,8 +1,9 @@
-from pyosc import ConnectionRole, OSCFraming, OSCMessage, OSCString, OSCTransport, Peer
+from pyosc import ConnectionRole, OSCFraming, OSCMessage, OSCString, OSCTransport, Peer, call_handler
 
 from pytk.core.device import Device
 from pytk.lighting.control.cueControl import cueControl
 
+from .eosDeskControls import eosDeskControls
 from .eosPlaybackControl import EosPlaybackControl
 from .eosPlaybackHandler import eosPlaybackHandler
 from .eosPlaybackTypes import (
@@ -32,16 +33,34 @@ class Eos(Device):
             remote_port=port,
             framing=OSCFraming.OSC11,
         )
+        self.call_handler = call_handler.CallHandler(self.conn)
         self.cues = EosPlaybackControl(self)
+        self.setup = eosDeskControls(self)
         self.playback = eosPlaybackStates()
         self.eos_playback_handler = eosPlaybackHandler(self)
 
     def connect(self) -> None:
         """Connect to the Eos device."""
-        self.conn.register_handler(message_address="/eos/out/active/cue/*/*", validator=eosActiveCueValidator, func=self.eos_playback_handler.handle_playback_event)
-        self.conn.register_handler(message_address="/eos/out/active/cue", validator=eosActiveCueCompletionValidator, func=self.eos_playback_handler.handle_playback_event)
-        self.conn.register_handler(message_address="/eos/out/cue/pending/*/*", validator=eosCuePendingValidator, func=self.eos_playback_handler.handle_playback_event)
-        self.conn.register_handler(message_address="/eos/out/event/cue/*/*/*", validator=eosPlaybackEventValidator, func=self.eos_playback_handler.handle_playback_event)
+        self.conn.register_handler(
+            message_address="/eos/out/active/cue/*/*",
+            validator=eosActiveCueValidator,
+            func=self.eos_playback_handler.handle_playback_event,
+        )
+        self.conn.register_handler(
+            message_address="/eos/out/active/cue",
+            validator=eosActiveCueCompletionValidator,
+            func=self.eos_playback_handler.handle_playback_event,
+        )
+        self.conn.register_handler(
+            message_address="/eos/out/cue/pending/*/*",
+            validator=eosCuePendingValidator,
+            func=self.eos_playback_handler.handle_playback_event,
+        )
+        self.conn.register_handler(
+            message_address="/eos/out/event/cue/*/*/*",
+            validator=eosPlaybackEventValidator,
+            func=self.eos_playback_handler.handle_playback_event,
+        )
         self.conn.start_listening()
 
     def disconnect(self) -> None:
