@@ -1,11 +1,11 @@
-from typing import Optional, Protocol
+from typing import Protocol
 
 
 class playbackControl(Protocol):
     """A protocol for controlling the playback state of a device."""
 
-    async def go(self, cue: Optional[int | float] = None) -> None:
-        """Fire the next cue, or a specific cue if provided."""
+    def go(self) -> None:
+        """Fire the next cue"""
         ...
 
     async def stop(self) -> None:
