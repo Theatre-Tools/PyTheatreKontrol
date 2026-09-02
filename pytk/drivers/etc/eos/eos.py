@@ -1,6 +1,9 @@
-from pyosc import ConnectionRole, OSCFraming, OSCMessage, OSCString, OSCTransport, Peer, call_handler
+from pydantic import BaseModel
+from pyosc import ConnectionRole, OSCFraming, OSCInt, OSCMessage, OSCString, OSCTransport, Peer, call_handler
 
 from pytk.core.device import Device
+from pytk.core.exceptions import DriverError
+from pytk.drivers.etc.eos.eosExceptions import EosSyntaxError
 from pytk.lighting.control.cueControl import cueControl
 
 from .eosDeskControls import eosDeskControls
@@ -13,6 +16,23 @@ from .eosPlaybackTypes import (
     eosPlaybackEventValidator,
     eosPlaybackStates,
 )
+
+
+class cmdValidator(BaseModel):
+    """A validator for the /eos/out/cmd message."""
+
+    address: str
+    args: tuple[OSCString, OSCInt]
+
+    @property
+    def success(self) -> bool:
+        """Returns True if the command was successful, False otherwise."""
+        return self.args[1].value == 0
+
+    @property
+    def cmd(self) -> str:
+        """Returns the command that was sent."""
+        return str(self.args[0].value)
 
 
 class Eos(Device):
@@ -66,6 +86,24 @@ class Eos(Device):
     def disconnect(self) -> None:
         """Disconnect from the Eos device."""
         self.conn.stop_listening()
+
+    def cmd(self, command: str) -> str | None:
+        """Sends a command directly to the Eos programmer.
+        Listens for a response on the `/eos/out/cmd` address, which may contain a `-` if there is a syntax error.
+        """
+        cmd = self.call_handler.call(
+            message=OSCMessage(address="/eos/newcmd", args=(OSCString(value=command),)),
+            message_return_address="/eos/out/cmd",
+            validator=cmdValidator,
+        )
+        if not isinstance(cmd, list) and cmd:
+            cmd = cmd.message
+        else:
+            raise DriverError(f"Unexpected response type: {type(cmd)}")
+        if not cmd.success:
+            raise EosSyntaxError(f"Command '{cmd.cmd}' failed with error code {cmd.args[1].value}")
+        else:
+            return cmd.cmd
 
 
 class EosCueControl(cueControl):
