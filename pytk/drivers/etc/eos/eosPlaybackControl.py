@@ -18,11 +18,11 @@ class EosPlaybackControl(playbackControl):
         """Fire the next cue in the active cue list"""
         self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=()))
 
-    async def stop(self) -> None:
+    def stop(self) -> None:
         """Stop the transition of the current cue or go back to the previous cue."""
         self._eos.conn.send_message(OSCMessage(address="/eos/cues/stop", args=()))
 
-    async def goto_cue(self, cue: int | float) -> None:
+    def goto_cue(self, cue: int | float) -> None:
         """Go to a specific cue."""
         if isinstance(cue, float):
             arg = OSCFloat(value=cue)
