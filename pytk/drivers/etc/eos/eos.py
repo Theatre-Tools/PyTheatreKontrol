@@ -15,6 +15,7 @@ from .eosPlaybackTypes import (
     eosCuePendingValidator,
     eosPlaybackEventValidator,
     eosPlaybackStates,
+    eosCuePreviousValidator,
 )
 
 
@@ -72,7 +73,7 @@ class Eos(Device):
             func=self.eos_playback_handler.handle_playback_event,
         )
         self.conn.register_handler(
-            message_address="/eos/out/cue/pending/*/*",
+            message_address="/eos/out/pending/cue/*/*",
             validator=eosCuePendingValidator,
             func=self.eos_playback_handler.handle_playback_event,
         )
@@ -81,7 +82,13 @@ class Eos(Device):
             validator=eosPlaybackEventValidator,
             func=self.eos_playback_handler.handle_playback_event,
         )
+        self.conn.register_handler(
+            message_address="/eos/out/previous/cue/*/*",
+            validator=eosCuePreviousValidator,
+            func=self.eos_playback_handler.handle_playback_event,
+        )
         self.conn.start_listening()
+        self.conn.send_message(OSCMessage(address="/eos/reset", args=()))
 
     def disconnect(self) -> None:
         """Disconnect from the Eos device."""
