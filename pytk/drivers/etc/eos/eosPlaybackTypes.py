@@ -4,16 +4,29 @@ from pydantic import BaseModel
 from pyosc import OSCFloat, OSCString
 
 
+class cueType(BaseModel):
+    """A class to represent a cue type in the Eos device."""
+
+    cue_list: int | float
+    """The cue list number."""
+    cue: int | float
+    """The cue number."""
+    part: int | None = None
+    """The part number. This is optional and can be None if not applicable."""
+
+    """Here are the optional ones"""
+
+
 class eosPlaybackStates(BaseModel):
     """Class to manage the playback states of the EOS driver."""
 
-    active_cue: int | float | None = None
+    active_cue: cueType | None = None
     """The currently active cue. Can be an integer, float, or None if no cue
     is active."""
-    pending_cue: int | float | None = None
+    pending_cue: cueType | None = None
     """The cue that is pending to be fired. Can be an integer, float, or
     None if no cue is pending."""
-    last_cue: int | float | None = None
+    last_cue: cueType | None = None
     """The last cue that was fired. Can be an integer, float, or None if
     no cue has been fired yet."""
     running: bool = False
@@ -77,6 +90,7 @@ class eosCuePendingValidator(BaseModel):
     """A class to validate the pending cue event from the Eos device."""
 
     address: str
+    args: tuple
 
     @property
     def cue_list(self) -> int | float | None:
@@ -103,22 +117,52 @@ class eosCuePendingValidator(BaseModel):
             raise ValueError(f"Invalid address: {self.address}") from e
 
 
-class cueType(BaseModel):
-    """A class to represent a cue type in the Eos device."""
+class eosCuePreviousValidator(BaseModel):
+    """A class to validate the pending cue event from the Eos device."""
 
-    cue_list: int | float
-    """The cue list number."""
-    cue: int | float
-    """The cue number."""
-    part: int | None = None
-    """The part number. This is optional and can be None if not applicable."""
+    address: str
+    args: tuple[OSCFloat]
 
-    """Here are the optional ones"""
+    @property
+    def cue_list(self) -> int | float | None:
+        """Returns the cue list associated with the pending cue event."""
+        try:
+            return int(self.address.split("/")[5])
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Invalid address: {self.address}") from e
+
+    @property
+    def cue(self) -> int | float | None:
+        """Returns the cue associated with the pending cue event."""
+        try:
+            return int(self.address.split("/")[6])
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Invalid address: {self.address}") from e
+
+    @property
+    def part(self) -> int | None:
+        """Returns the part associated with the pending cue event."""
+        try:
+            return int(self.address.split("/")[7])
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Invalid address: {self.address}") from e
+
+    @property
+    def completion(self) -> float:
+        """Returns the current time within the active cue."""
+        try:
+            return self.args[0].value
+        except (IndexError, ValueError) as e:
+            raise ValueError(f"Invalid args: {self.args}") from e
+
+
+
 
 
 class eosActiveCueCompletionValidator(BaseModel):
     """Takes in a message from /eos/out/active/cue and returns the current completion (decimal) within the cue fade."""
 
+    address: str
     args: tuple[OSCFloat]
 
     @property
