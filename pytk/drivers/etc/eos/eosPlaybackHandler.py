@@ -5,9 +5,11 @@ from pyosc import OSCMessage
 from pytk.core.exceptions import InvalidStateError
 
 from .eosPlaybackTypes import (
+    cueType,
     eosActiveCueCompletionValidator,
     eosActiveCueValidator,
     eosCuePendingValidator,
+    eosCuePreviousValidator,
     eosPlaybackEventValidator,
     eventTypes,
 )
@@ -26,6 +28,7 @@ class eosPlaybackHandler:
         | eosActiveCueCompletionValidator
         | eosActiveCueValidator
         | eosCuePendingValidator
+        | eosCuePreviousValidator
         | OSCMessage,
     ) -> None:
         """Handle playback events from the Eos device."""
@@ -36,15 +39,18 @@ class eosPlaybackHandler:
                 self.eos.playback.running = False
             self.eos.playback.completion = message.completion
 
-        elif isinstance(message, eosCuePendingValidator):
+        elif isinstance(message, eosCuePendingValidator) and message.cue_list and message.cue:
             """Update the pending cue value when a new pending cue is received."""
-            self.eos.playback.pending_cue = message.cue
+            self.eos.playback.pending_cue = cueType(cue_list=message.cue_list, cue=message.cue, part=1)
 
-        elif isinstance(message, eosPlaybackEventValidator):
+        elif isinstance(message, eosCuePreviousValidator) and message.cue_list and message.cue:
+            """Update the previous cue value when a new previous cue is received."""
+            self.eos.playback.last_cue = cueType(cue_list=message.cue_list, cue=message.cue, part=1)
+
+        elif isinstance(message, eosPlaybackEventValidator) and message.cue_list and message.cue:
             """Update the playback state when a new playback event is received."""
             if message.event_type == eventTypes.CUE_FIRE:
-                self.eos.playback.last_cue = self.eos.playback.active_cue
-                self.eos.playback.active_cue = message.cue
+                self.eos.playback.active_cue = cueType(cue_list=message.cue_list, cue=message.cue, part=1)
                 self.eos.playback.running = True
 
             elif message.event_type == eventTypes.CUE_STOP:
