@@ -62,9 +62,6 @@ class Eos(Device):
 
     def connect(self) -> None:
         """Connect to the Eos device."""
-        if not self.conn.connected.is_set():
-            raise DeviceOfflineError("Not connected to Eos device.")
-
         self.conn.register_handler(
             message_address="/eos/out/active/cue/*/*",
             validator=eosActiveCueValidator,
