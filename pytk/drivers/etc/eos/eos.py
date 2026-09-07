@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from pyosc import ConnectionRole, OSCFraming, OSCInt, OSCMessage, OSCString, OSCTransport, Peer, call_handler
 
 from pytk.core.device import Device
-from pytk.core.exceptions import DriverError
+from pytk.core.exceptions import DeviceOfflineError, DriverError
 from pytk.drivers.etc.eos.eosExceptions import EosSyntaxError
 from pytk.lighting.control.cueControl import cueControl
 
@@ -13,9 +13,9 @@ from .eosPlaybackTypes import (
     eosActiveCueCompletionValidator,
     eosActiveCueValidator,
     eosCuePendingValidator,
+    eosCuePreviousValidator,
     eosPlaybackEventValidator,
     eosPlaybackStates,
-    eosCuePreviousValidator,
 )
 
 
@@ -62,6 +62,9 @@ class Eos(Device):
 
     def connect(self) -> None:
         """Connect to the Eos device."""
+        if not self.conn.connected.is_set():
+            raise DeviceOfflineError("Not connected to Eos device.")
+
         self.conn.register_handler(
             message_address="/eos/out/active/cue/*/*",
             validator=eosActiveCueValidator,
@@ -87,8 +90,10 @@ class Eos(Device):
             validator=eosCuePreviousValidator,
             func=self.eos_playback_handler.handle_playback_event,
         )
-        self.conn.start_listening()
-        self.conn.send_message(OSCMessage(address="/eos/reset", args=()))
+        try:
+            self.conn.start_listening()
+        except Exception as e:
+            raise DeviceOfflineError(f"Failed to connect to Eos device: {e}")
 
     def disconnect(self) -> None:
         """Disconnect from the Eos device."""
