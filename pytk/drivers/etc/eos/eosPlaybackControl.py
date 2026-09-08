@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from pyosc import OSCFloat, OSCInt, OSCMessage
+from pyosc import OSCArgTypes, OSCMessage
 
 from pytk.lighting.control.playbackControl import playbackControl
 
@@ -25,7 +25,7 @@ class EosPlaybackControl(playbackControl):
     def goto_cue(self, cue: int | float) -> None:
         """Go to a specific cue."""
         if isinstance(cue, float):
-            arg = OSCFloat(value=cue)
+            arg = OSCArgTypes.OSCFloat(value=cue)
         else:
-            arg = OSCInt(value=cue)
+            arg = OSCArgTypes.OSCInt(value=cue)
         self._eos.conn.send_message(OSCMessage(address="/eos/cues/fire", args=(arg,)))

@@ -1,4 +1,4 @@
-from pyosc import OSCFloat, OSCInt, OSCMessage
+from pyosc import OSCArgTypes, OSCMessage
 
 
 class eosDeskControls:
@@ -23,18 +23,18 @@ class _macro:
     def fire(self):
         """Fire a specific macro on the Eos device."""
         if isinstance(self.macro, (float)):
-            arg = OSCFloat(value=self.macro)
+            arg = OSCArgTypes.OSCFloat(value=self.macro)
 
         else:
-            arg = OSCInt(value=self.macro)
+            arg = OSCArgTypes.OSCInt(value=self.macro)
 
         self._eos.conn.send_message(OSCMessage(address="/eos/macro/fire", args=(arg,)))
 
     def select(self):
         """Select a specific macro on the Eos device."""
         if isinstance(self.macro, (float)):
-            arg = OSCFloat(value=self.macro)
+            arg = OSCArgTypes.OSCFloat(value=self.macro)
         else:
-            arg = OSCInt(value=self.macro)
+            arg = OSCArgTypes.OSCInt(value=self.macro)
 
         self._eos.conn.send_message(OSCMessage(address="/eos/macro", args=(arg,)))

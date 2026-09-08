@@ -1,7 +1,7 @@
 from enum import Enum
 
 from pydantic import BaseModel
-from pyosc import OSCFloat, OSCString
+from pyosc import OSCArgTypes
 
 
 class cueType(BaseModel):
@@ -53,7 +53,7 @@ class eosPlaybackEventValidator(BaseModel):
         except ValueError:
             return float(value)
 
-    args: tuple[OSCString]
+    args: tuple[OSCArgTypes.OSCString]
     address: str
 
     @property
@@ -121,7 +121,7 @@ class eosCuePreviousValidator(BaseModel):
     """A class to validate the pending cue event from the Eos device."""
 
     address: str
-    args: tuple[OSCFloat]
+    args: tuple[OSCArgTypes.OSCFloat]
 
     @property
     def cue_list(self) -> int | float | None:
@@ -156,14 +156,11 @@ class eosCuePreviousValidator(BaseModel):
             raise ValueError(f"Invalid args: {self.args}") from e
 
 
-
-
-
 class eosActiveCueCompletionValidator(BaseModel):
     """Takes in a message from /eos/out/active/cue and returns the current completion (decimal) within the cue fade."""
 
     address: str
-    args: tuple[OSCFloat]
+    args: tuple[OSCArgTypes.OSCFloat]
 
     @property
     def completion(self) -> float:
@@ -178,7 +175,7 @@ class eosActiveCueValidator(BaseModel):
     """`/eos/out/active/cue/*/* ` - Returns the current active cue and part number."""
 
     address: str
-    args: tuple[OSCFloat]
+    args: tuple[OSCArgTypes.OSCFloat]
 
     @property
     def cue(self) -> int | float:
