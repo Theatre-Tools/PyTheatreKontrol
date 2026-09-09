@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .eos import Eos
 
 
-class EosPlaybackControl(playbackControl):
+class eosPlaybackControl(playbackControl):
     """A class that implements the PlaybackControl protocol for Eos devices."""
 
     def __init__(self, _eos: Eos):

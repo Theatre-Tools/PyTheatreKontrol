@@ -8,7 +8,7 @@ from pytk.drivers.etc.eos.eosExceptions import EosSyntaxError
 from pytk.lighting.control.cueControl import cueControl
 
 from .eosDeskControls import eosDeskControls
-from .eosPlaybackControl import EosPlaybackControl
+from .eosPlaybackControl import eosPlaybackControl
 from .eosPlaybackHandler import eosPlaybackHandler
 from .eosPlaybackTypes import (
     eosActiveCueCompletionValidator,
@@ -56,7 +56,7 @@ class Eos(Device):
             framing=OSCFraming.OSC11,
         )
         self.call_handler = call_handler.CallHandler(self.conn)
-        self.cues = EosPlaybackControl(self)
+        self.cues = eosPlaybackControl(self)
         self.setup = eosDeskControls(self)
         self.playback = eosPlaybackStates()
         self.eos_playback_handler = eosPlaybackHandler(self)
