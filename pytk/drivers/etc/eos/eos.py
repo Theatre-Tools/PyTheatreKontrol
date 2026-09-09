@@ -1,11 +1,12 @@
 from pydantic import BaseModel
-from pyosc import ConnectionRole, OSCFraming, OSCMessage, OSCTransport, Peer, call_handler
+from pyosc import OSCMessage, call_handler
 from pyosc.types import OSCInt, OSCString
 
 from pytk.core.device import Device
 from pytk.core.exceptions import DeviceOfflineError, DriverError
 from pytk.drivers.etc.eos.eosExceptions import EosSyntaxError
 from pytk.lighting.control.cueControl import cueControl
+from pytk.transport import OSC10, OSC11, OSCUDP
 
 from .eosDeskControls import eosDeskControls
 from .eosPlaybackControl import eosPlaybackControl
@@ -40,21 +41,9 @@ class cmdValidator(BaseModel):
 class Eos(Device):
     """A device that implements the Eos protocol."""
 
-    def __init__(
-        self,
-        device_id: str,
-        host: str,
-        port: int = 3037,
-        name: str = "Eos",
-    ):
+    def __init__(self, transport: OSC11 | OSC10 | OSCUDP, device_id: str, name: str = "Eos"):
         super().__init__(device_id=device_id, name=name)
-        self.conn = Peer(
-            connection_role=ConnectionRole.INITIATING,
-            transport=OSCTransport.TCP,
-            remote_address=host,
-            remote_port=port,
-            framing=OSCFraming.OSC11,
-        )
+        self.conn = transport.conn()
         self.call_handler = call_handler.CallHandler(self.conn)
         self.cues = eosPlaybackControl(self)
         self.setup = eosDeskControls(self)
