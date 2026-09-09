@@ -61,5 +61,8 @@ class eosPlaybackHandler:
 
             else:
                 raise InvalidStateError(f"Invalid playback event type: {message.event_type}")
+        elif isinstance(message, eosActiveCueValidator) and message.cue_list and message.cue:
+            """Update the active cue value when a new active cue is received."""
+            self.eos.playback.active_cue = cueType(cue_list=message.cue_list, cue=message.cue, part=1)
         else:
-            raise InvalidStateError(f"Invalid playback event message type: {type(message)}")
+            raise InvalidStateError(f"Invalid playback event message type: {type(message)} {message}")
