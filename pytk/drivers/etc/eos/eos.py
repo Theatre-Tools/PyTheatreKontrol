@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from pyosc import ConnectionRole, OSCArgTypes, OSCFraming, OSCMessage, OSCTransport, Peer, call_handler
+from pyosc import ConnectionRole, OSCFraming, OSCMessage, OSCTransport, Peer, call_handler
+from pyosc.types import OSCInt, OSCString
 
 from pytk.core.device import Device
 from pytk.core.exceptions import DeviceOfflineError, DriverError
@@ -23,7 +24,7 @@ class cmdValidator(BaseModel):
     """A validator for the /eos/out/cmd message."""
 
     address: str
-    args: tuple[OSCArgTypes.OSCString, OSCArgTypes.OSCInt]
+    args: tuple[OSCString, OSCInt]
 
     @property
     def success(self) -> bool:
@@ -101,7 +102,7 @@ class Eos(Device):
         Listens for a response on the `/eos/out/cmd` address, which may contain a `-` if there is a syntax error.
         """
         cmd = self.call_handler.call(
-            message=OSCMessage(address="/eos/newcmd", args=(OSCArgTypes.OSCString(value=command),)),
+            message=OSCMessage(address="/eos/newcmd", args=(OSCString(value=command),)),
             message_return_address="/eos/out/cmd",
             validator=cmdValidator,
         )
@@ -127,4 +128,4 @@ class EosCueControl(cueControl):
 
     async def record_cue(self, cue: str) -> None:
         """Record a specific cue."""
-        self._eos.conn.send_message(OSCMessage(address="/eos/cmd", args=(OSCArgTypes.OSCString(value=f"Record Cue {cue}"),)))
+        self._eos.conn.send_message(OSCMessage(address="/eos/cmd", args=(OSCString(value=f"Record Cue {cue}"),)))

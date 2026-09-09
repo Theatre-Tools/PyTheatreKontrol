@@ -1,7 +1,7 @@
 from enum import Enum
 
 from pydantic import BaseModel
-from pyosc import OSCArgTypes
+from pyosc.types import OSCFloat, OSCString
 
 
 class cueType(BaseModel):
@@ -53,7 +53,7 @@ class eosPlaybackEventValidator(BaseModel):
         except ValueError:
             return float(value)
 
-    args: tuple[OSCArgTypes.OSCString]
+    args: tuple[OSCString]
     address: str
 
     @property
@@ -90,7 +90,6 @@ class eosCuePendingValidator(BaseModel):
     """A class to validate the pending cue event from the Eos device."""
 
     address: str
-    args: tuple
 
     @property
     def cue_list(self) -> int | float | None:
@@ -121,7 +120,6 @@ class eosCuePreviousValidator(BaseModel):
     """A class to validate the pending cue event from the Eos device."""
 
     address: str
-    args: tuple[OSCArgTypes.OSCFloat]
 
     @property
     def cue_list(self) -> int | float | None:
@@ -147,20 +145,12 @@ class eosCuePreviousValidator(BaseModel):
         except (IndexError, ValueError) as e:
             raise ValueError(f"Invalid address: {self.address}") from e
 
-    @property
-    def completion(self) -> float:
-        """Returns the current time within the active cue."""
-        try:
-            return self.args[0].value
-        except (IndexError, ValueError) as e:
-            raise ValueError(f"Invalid args: {self.args}") from e
-
 
 class eosActiveCueCompletionValidator(BaseModel):
     """Takes in a message from /eos/out/active/cue and returns the current completion (decimal) within the cue fade."""
 
     address: str
-    args: tuple[OSCArgTypes.OSCFloat]
+    args: tuple[OSCFloat]
 
     @property
     def completion(self) -> float:
@@ -175,7 +165,7 @@ class eosActiveCueValidator(BaseModel):
     """`/eos/out/active/cue/*/* ` - Returns the current active cue and part number."""
 
     address: str
-    args: tuple[OSCArgTypes.OSCFloat]
+    args: tuple[OSCFloat]
 
     @property
     def cue(self) -> int | float:
