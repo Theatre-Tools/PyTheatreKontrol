@@ -10,7 +10,7 @@ class OSC(Protocol):
         """Initialize the transport with the given host and port."""
         ...
 
-    def conn(self) -> "Peer":
+    def peer(self) -> "Peer":
         """Return the Peer object for the transport."""
         ...
 
@@ -19,43 +19,51 @@ class OSCUDP(OSC):
     """A class for OSC transport over UDP."""
 
     def __init__(self, host: str, port: int, bind_port: int, bind_ip: str = "0.0.0.0"):
-        self.peer = Peer(
+        self.host = host
+        self.port = port
+        self.bind_port = bind_port
+        self.bind_ip = bind_ip
+
+    def peer(self) -> Peer:
+        return Peer(
             transport=OSCTransport.UDP,
-            remote_address=host,
-            remote_port=port,
-            bind_ip=bind_ip,
-            bind_port=bind_port,
+            remote_address=self.host,
+            remote_port=self.port,
+            bind_ip=self.bind_ip,
+            bind_port=self.bind_port,
             learning=False,
         )
-
-    def conn(self) -> Peer:
-        return self.peer
 
 
 class OSC11(OSC):
     """A class for OSC 1.1 transport over TCP."""
 
     def __init__(self, host: str, port: int):
-        self.peer = Peer(
+        self.host = host
+        self.port = port
+
+    def peer(self) -> Peer:
+        return Peer(
             connection_role=ConnectionRole.INITIATING,
             transport=OSCTransport.TCP,
-            remote_address=host,
-            remote_port=port,
+            remote_address=self.host,
+            remote_port=self.port,
             framing=OSCFraming.OSC11,
         )
-
-    def conn(self) -> Peer:
-        return self.peer
 
 
 class OSC10(OSC):
     """A class for OSC 1.0 transport over TCP."""
 
     def __init__(self, host: str, port: int):
-        self.peer = Peer(
+        self.host = host
+        self.port = port
+
+    def peer(self) -> Peer:
+        return Peer(
             connection_role=ConnectionRole.INITIATING,
             transport=OSCTransport.TCP,
-            remote_address=host,
-            remote_port=port,
+            remote_address=self.host,
+            remote_port=self.port,
             framing=OSCFraming.OSC10,
         )
