@@ -1,16 +1,13 @@
-from typing import Protocol
+from abc import ABC, abstractmethod
 
 from pyosc import ConnectionRole, OSCFraming, OSCTransport, Peer
 
 
-class OSC(Protocol):
+class OSC(ABC):
     """A protocol for OSC transport classes."""
 
-    def __init__(self, host: str, port: int):
-        """Initialize the transport with the given host and port."""
-        ...
-
-    def peer(self) -> "Peer":
+    @abstractmethod
+    def peer(self) -> Peer:
         """Return the Peer object for the transport."""
         ...
 

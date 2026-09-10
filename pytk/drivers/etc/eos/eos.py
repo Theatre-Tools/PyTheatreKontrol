@@ -43,7 +43,7 @@ class Eos(Device):
 
     def __init__(self, transport: OSC11 | OSC10 | OSCUDP, device_id: str, name: str = "Eos"):
         super().__init__(device_id=device_id, name=name)
-        self.conn = transport.conn()
+        self.conn = transport.peer()
         self.call_handler = call_handler.CallHandler(self.conn)
         self.cues = eosPlaybackControl(self)
         self.setup = eosDeskControls(self)
