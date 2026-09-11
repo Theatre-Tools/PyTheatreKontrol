@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from pyosc.types import OSCString
+from pyosc.types import OSCInt, OSCString
 
 from pytk.drivers.etc.eos.eosPlaybackTypes import eventTypes
 
@@ -65,3 +65,33 @@ class eosShowSaveEventValidator(BaseModel):
     def show_file(self) -> str | None:
         """Returns the show file associated with the show save event."""
         return self.args[0].value if self.args else None
+
+
+class eosCmdOutValidator(BaseModel):
+    """A class to validate messages from the /eos/out/user/{user_id}/cmd address"""
+
+    args: tuple[OSCString, OSCInt]
+    address: str
+
+    @property
+    def user_id(self) -> str | None:
+        """Returns the user ID associated with the command output event."""
+        try:
+            return self.address.split("/")[4]
+        except IndexError as e:
+            raise ValueError(f"Invalid address: {self.address}") from e
+
+    @property
+    def command_output(self) -> str | None:
+        """Returns the command output associated with the command output event."""
+        return self.args[0].value if self.args else None
+
+    @property
+    def command_success(self) -> bool | None:
+        """Returns True if the command was successful, False if it failed or unknown.
+        Arg Value is 0 for success, 1 for failure
+        """
+        if self.args[1].value == 0:
+            return True
+        else:
+            return False
