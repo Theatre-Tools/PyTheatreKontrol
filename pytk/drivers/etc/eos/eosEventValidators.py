@@ -156,3 +156,18 @@ class eosStateEventValidator(BaseModel):
             return eosStates.BLIND
         else:
             return None
+
+class eosLockEventValidator(BaseModel):
+    """A class to validate messages from the /eos/out/event/locked address"""
+
+    args: tuple[OSCInt]
+
+    @property
+    def locked(self) -> bool | None:
+        """Returns True if the console is locked, False if it is unlocked, or None if unknown."""
+        if self.args[0].value == 0:
+            return False
+        elif self.args[0].value == 1:
+            return True
+        else:
+            return None
