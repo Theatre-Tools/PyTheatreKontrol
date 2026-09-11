@@ -95,3 +95,23 @@ class eosCmdOutValidator(BaseModel):
             return True
         else:
             return False
+
+
+class eosSoftKeyEventValidator(BaseModel):
+    """A class to validate messages from the /eos/out/softkey/{key_id} address"""
+
+    args: tuple[OSCString]
+    address: str
+
+    @property
+    def key_id(self) -> str | None:
+        """Returns the key ID associated with the softkey event."""
+        try:
+            return self.address.split("/")[4]
+        except IndexError as e:
+            raise ValueError(f"Invalid address: {self.address}") from e
+
+    @property
+    def key_text(self) -> str | None:
+        """Returns the key text associated with the softkey event."""
+        return self.args[0].value if self.args else None
