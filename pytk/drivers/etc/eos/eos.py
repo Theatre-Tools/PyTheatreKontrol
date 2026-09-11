@@ -1,6 +1,5 @@
-from pydantic import BaseModel
 from pyosc import OSCMessage, call_handler
-from pyosc.types import OSCInt, OSCString
+from pyosc.types import OSCString
 
 from pytk.core.device import Device
 from pytk.core.exceptions import DeviceOfflineError, DriverError
@@ -8,7 +7,7 @@ from pytk.drivers.etc.eos.eosExceptions import EosSyntaxError
 from pytk.lighting.control.cueControl import cueControl
 from pytk.transport import OSC
 
-from .eosDeskControls import eosDeskControls
+from .eosDeskControls import cmdValidator, eosDeskControls
 from .eosPlaybackControl import eosPlaybackControl
 from .eosPlaybackHandler import eosPlaybackHandler
 from .eosPlaybackTypes import (
@@ -19,23 +18,6 @@ from .eosPlaybackTypes import (
     eosPlaybackEventValidator,
     eosPlaybackStates,
 )
-
-
-class cmdValidator(BaseModel):
-    """A validator for the /eos/out/cmd message."""
-
-    address: str
-    args: tuple[OSCString, OSCInt]
-
-    @property
-    def success(self) -> bool:
-        """Returns True if the command was successful, False otherwise."""
-        return self.args[1].value == 0
-
-    @property
-    def cmd(self) -> str:
-        """Returns the command that was sent."""
-        return str(self.args[0].value)
 
 
 class Eos(Device):
