@@ -6,7 +6,7 @@ from pytk.core.device import Device
 from pytk.core.exceptions import DeviceOfflineError, DriverError
 from pytk.drivers.etc.eos.eosExceptions import EosSyntaxError
 from pytk.lighting.control.cueControl import cueControl
-from pytk.transport import OSC10, OSC11, OSCUDP
+from pytk.transport import OSC
 
 from .eosDeskControls import eosDeskControls
 from .eosPlaybackControl import eosPlaybackControl
@@ -41,7 +41,7 @@ class cmdValidator(BaseModel):
 class Eos(Device):
     """A device that implements the Eos protocol."""
 
-    def __init__(self, transport: OSC11 | OSC10 | OSCUDP, device_id: str, name: str = "Eos"):
+    def __init__(self, transport: OSC, device_id: str, name: str = "Eos"):
         super().__init__(device_id=device_id, name=name)
         self.conn = transport.peer()
         self.call_handler = call_handler.CallHandler(self.conn)
