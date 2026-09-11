@@ -127,7 +127,7 @@ class eosSoftKeyEventValidator(BaseModel):
 
 
 class eosActiveChannelEventValidator(BaseModel):
-    """A class to validate messages from the /eos/out/active/chan/ address"""
+    """A class to validate messages from the /eos/out/active/chan address"""
 
     args: tuple[OSCInt, OSCString]
 
