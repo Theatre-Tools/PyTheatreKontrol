@@ -115,3 +115,19 @@ class eosSoftKeyEventValidator(BaseModel):
     def key_text(self) -> str | None:
         """Returns the key text associated with the softkey event."""
         return self.args[0].value if self.args else None
+
+
+class eosActiveChannelEventValidator(BaseModel):
+    """A class to validate messages from the /eos/out/active/chan/ address"""
+
+    args: tuple[OSCInt, OSCString]
+
+    @property
+    def channel(self) -> int | None:
+        """Returns the channel number associated with the active channel event."""
+        return self.args[0].value if self.args else None
+
+    @property
+    def channel_info(self) -> str | None:
+        """Returns the channel info associated with the active channel event."""
+        return self.args[1].value if self.args else None
