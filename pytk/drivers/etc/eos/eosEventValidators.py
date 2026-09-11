@@ -1,7 +1,16 @@
+from enum import Enum
+
 from pydantic import BaseModel
 from pyosc.types import OSCInt, OSCString
 
 from pytk.drivers.etc.eos.eosPlaybackTypes import eventTypes
+
+
+class eosStates(Enum):
+    """Contains eos states"""
+
+    BLIND = "blind"
+    LIVE = "live"
 
 
 class eosPlaybackEventValidator(BaseModel):
@@ -131,3 +140,19 @@ class eosActiveChannelEventValidator(BaseModel):
     def channel_info(self) -> str | None:
         """Returns the channel info associated with the active channel event."""
         return self.args[1].value if self.args else None
+
+
+class eosStateEventValidator(BaseModel):
+    """A class to validate messages from the /eos/out/event/state address"""
+
+    args: tuple[OSCInt]
+
+    @property
+    def state(self) -> eosStates | None:
+        """Returns the state associated with the state event."""
+        if self.args[0].value == 0:
+            return eosStates.LIVE
+        elif self.args[0].value == 1:
+            return eosStates.BLIND
+        else:
+            return None
