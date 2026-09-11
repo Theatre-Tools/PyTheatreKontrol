@@ -93,10 +93,10 @@ class EosCueControl(cueControl):
     def __init__(self, _eos: Eos):
         self._eos = _eos
 
-    async def goto_cue(self, cue: str) -> None:
+    def goto_cue(self, cue: str) -> None:
         """Go to a specific cue."""
         self._eos.conn.send_message(OSCMessage(address=f"/eos/cues/{cue}/fire", args=()))
 
-    async def record_cue(self, cue: str) -> None:
+    def record_cue(self, cue: str) -> None:
         """Record a specific cue."""
         self._eos.conn.send_message(OSCMessage(address="/eos/cmd", args=(OSCString(value=f"Record Cue {cue}"),)))
