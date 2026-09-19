@@ -8,6 +8,7 @@ from pytk.lighting.control.cueControl import cueControl
 from pytk.transport import OSC
 
 from .eosDeskControls import cmdValidator, eosDeskControls
+from .eosEvents import eosEvents
 from .eosPlaybackControl import eosPlaybackControl
 from .eosPlaybackHandler import eosPlaybackHandler
 from .eosPlaybackTypes import (
@@ -18,6 +19,7 @@ from .eosPlaybackTypes import (
     eosPlaybackEventValidator,
     eosPlaybackStates,
 )
+from .eventDefenitions import Events
 
 
 class Eos(Device):
@@ -31,6 +33,8 @@ class Eos(Device):
         self.setup = eosDeskControls(self)
         self.playback = eosPlaybackStates()
         self.eos_playback_handler = eosPlaybackHandler(self)
+        self.eos_events = eosEvents(self)
+        self.event_types = Events()
 
     def connect(self) -> None:
         """Connect to the Eos device."""
