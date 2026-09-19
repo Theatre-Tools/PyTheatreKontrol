@@ -66,3 +66,32 @@ class eosPlaybackHandler:
             self.eos.playback.active_cue = cueType(cue_list=message.cue_list, cue=message.cue, part=1)
         else:
             raise InvalidStateError(f"Invalid playback event message type: {type(message)} {message}")
+
+
+def register_playback_handlers(eos: Eos):
+    eos.conn.register_handler(
+        message_address="/eos/out/active/cue/*/*",
+        validator=eosActiveCueValidator,
+        func=eos.playback_handler.handle_playback_event,
+    )
+
+    eos.conn.register_handler(
+        message_address="/eos/out/active/cue",
+        validator=eosActiveCueCompletionValidator,
+        func=eos.playback_handler.handle_playback_event,
+    )
+    eos.conn.register_handler(
+        message_address="/eos/out/pending/cue/*/*",
+        validator=eosCuePendingValidator,
+        func=eos.playback_handler.handle_playback_event,
+    )
+    eos.conn.register_handler(
+        message_address="/eos/out/event/cue/*/*/*",
+        validator=eosPlaybackEventValidator,
+        func=eos.playback_handler.handle_playback_event,
+    )
+    eos.conn.register_handler(
+        message_address="/eos/out/previous/cue/*/*",
+        validator=eosCuePreviousValidator,
+        func=eos.playback_handler.handle_playback_event,
+    )
