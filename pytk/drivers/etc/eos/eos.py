@@ -10,13 +10,8 @@ from pytk.transport import OSC
 from .eosDeskControls import cmdValidator, eosDeskControls
 from .eosEvents import eosEvents
 from .eosPlaybackControl import eosPlaybackControl
-from .eosPlaybackHandler import eosPlaybackHandler
+from .eosPlaybackHandler import eosPlaybackHandler, register_playback_handlers
 from .eosPlaybackTypes import (
-    eosActiveCueCompletionValidator,
-    eosActiveCueValidator,
-    eosCuePendingValidator,
-    eosCuePreviousValidator,
-    eosPlaybackEventValidator,
     eosPlaybackStates,
 )
 from .eventDefenitions import Events
@@ -38,31 +33,7 @@ class Eos(Device):
 
     def connect(self) -> None:
         """Connect to the Eos device."""
-        self.conn.register_handler(
-            message_address="/eos/out/active/cue/*/*",
-            validator=eosActiveCueValidator,
-            func=self.playback_handler.handle_playback_event,
-        )
-        self.conn.register_handler(
-            message_address="/eos/out/active/cue",
-            validator=eosActiveCueCompletionValidator,
-            func=self.playback_handler.handle_playback_event,
-        )
-        self.conn.register_handler(
-            message_address="/eos/out/pending/cue/*/*",
-            validator=eosCuePendingValidator,
-            func=self.playback_handler.handle_playback_event,
-        )
-        self.conn.register_handler(
-            message_address="/eos/out/event/cue/*/*/*",
-            validator=eosPlaybackEventValidator,
-            func=self.playback_handler.handle_playback_event,
-        )
-        self.conn.register_handler(
-            message_address="/eos/out/previous/cue/*/*",
-            validator=eosCuePreviousValidator,
-            func=self.playback_handler.handle_playback_event,
-        )
+        register_playback_handlers(self)
         try:
             self.conn.start_listening()
         except Exception as e:
