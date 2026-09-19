@@ -64,3 +64,6 @@ class OSC10(OSC):
             remote_port=self.port,
             framing=OSCFraming.OSC10,
         )
+
+
+__all__ = ["OSC10", "OSC11", "OSCUDP"]
