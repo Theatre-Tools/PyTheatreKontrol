@@ -32,8 +32,8 @@ class Eos(Device):
         self.cues = eosPlaybackControl(self)
         self.setup = eosDeskControls(self)
         self.playback = eosPlaybackStates()
-        self.eos_playback_handler = eosPlaybackHandler(self)
-        self.eos_events = eosEvents(self)
+        self.playback_handler = eosPlaybackHandler(self)
+        self.events = eosEvents(self)
         self.event_types = Events()
 
     def connect(self) -> None:
@@ -41,27 +41,27 @@ class Eos(Device):
         self.conn.register_handler(
             message_address="/eos/out/active/cue/*/*",
             validator=eosActiveCueValidator,
-            func=self.eos_playback_handler.handle_playback_event,
+            func=self.playback_handler.handle_playback_event,
         )
         self.conn.register_handler(
             message_address="/eos/out/active/cue",
             validator=eosActiveCueCompletionValidator,
-            func=self.eos_playback_handler.handle_playback_event,
+            func=self.playback_handler.handle_playback_event,
         )
         self.conn.register_handler(
             message_address="/eos/out/pending/cue/*/*",
             validator=eosCuePendingValidator,
-            func=self.eos_playback_handler.handle_playback_event,
+            func=self.playback_handler.handle_playback_event,
         )
         self.conn.register_handler(
             message_address="/eos/out/event/cue/*/*/*",
             validator=eosPlaybackEventValidator,
-            func=self.eos_playback_handler.handle_playback_event,
+            func=self.playback_handler.handle_playback_event,
         )
         self.conn.register_handler(
             message_address="/eos/out/previous/cue/*/*",
             validator=eosCuePreviousValidator,
-            func=self.eos_playback_handler.handle_playback_event,
+            func=self.playback_handler.handle_playback_event,
         )
         try:
             self.conn.start_listening()
