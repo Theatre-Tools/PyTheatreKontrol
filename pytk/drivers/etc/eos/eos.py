@@ -16,6 +16,9 @@ from .eosPlaybackTypes import (
 )
 from .eventDefenitions import Events
 
+from .eosAbout import eosAbout
+from .eosAboutHandler import eosAboutHandler
+
 
 class Eos(Device):
     """A device that implements the Eos protocol."""
@@ -30,6 +33,8 @@ class Eos(Device):
         self.playback_handler = eosPlaybackHandler(self)
         self.events = eosEvents(self)
         self.event_types = Events()
+        self.about = eosAbout()
+        self._about_handler = eosAboutHandler(self)
 
     def connect(self) -> None:
         """Connect to the Eos device."""
