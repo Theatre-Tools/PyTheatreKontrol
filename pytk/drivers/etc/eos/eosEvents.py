@@ -9,7 +9,7 @@ class eosEvents:
     def __init__(self, eos):
         self.eos = eos
 
-    def register_event_handler(self, event_type: Event, handler: Callable[[Event], None]) -> None:
+    def register_event_handler(self, event_type, handler: Callable) -> None:
         """Registers an event handler for the given event type."""
         self.eos.conn.register_handler(message_address=event_type.address, validator=event_type.validator, func=handler)
 
