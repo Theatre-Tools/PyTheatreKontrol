@@ -12,6 +12,7 @@ from .eosAboutHandler import eosAboutHandler, register_about_handlers
 from .eosDeskControls import cmdValidator, eosDeskControls
 from .eosEvents import eosEvents
 from .eosEventValidators import eosStates
+from .eosKeys import eosKeys
 from .eosPlaybackControl import eosPlaybackControl
 from .eosPlaybackHandler import eosPlaybackHandler, register_playback_handlers, register_state_handlers
 from .eosPlaybackTypes import (
@@ -36,6 +37,7 @@ class Eos(Device):
         self.about = eosAbout()
         self._about_handler = eosAboutHandler(self)
         self.state: eosStates | None = None
+        self.keys = eosKeys(self)
 
     def connect(self) -> None:
         """Connect to the Eos device."""
