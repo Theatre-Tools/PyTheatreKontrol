@@ -1,10 +1,10 @@
 from datetime import datetime
-from .eosEventValidators import eosLockEventValidator, eosShowSaveEventValidator
-from .eosAboutValidators import eosVersionValidator
-
 from typing import TYPE_CHECKING
 
 from pyosc import OSCMessage
+
+from .eosAboutValidators import eosVersionValidator
+from .eosEventValidators import eosLockEventValidator, eosShowSaveEventValidator
 
 if TYPE_CHECKING:
     from .eos import Eos
