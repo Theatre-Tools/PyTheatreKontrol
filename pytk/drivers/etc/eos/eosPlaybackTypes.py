@@ -14,8 +14,6 @@ class cueType(BaseModel):
     part: int | None = None
     """The part number. This is optional and can be None if not applicable."""
 
-    """Here are the optional ones"""
-
 
 class eosPlaybackStates(BaseModel):
     """Class to manage the playback states of the EOS driver."""
