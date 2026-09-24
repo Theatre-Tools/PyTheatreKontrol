@@ -11,8 +11,9 @@ from .eosAbout import eosAbout
 from .eosAboutHandler import eosAboutHandler, register_about_handlers
 from .eosDeskControls import cmdValidator, eosDeskControls
 from .eosEvents import eosEvents
+from .eosEventValidators import eosStates
 from .eosPlaybackControl import eosPlaybackControl
-from .eosPlaybackHandler import eosPlaybackHandler, register_playback_handlers
+from .eosPlaybackHandler import eosPlaybackHandler, register_playback_handlers, register_state_handlers
 from .eosPlaybackTypes import (
     eosPlaybackStates,
 )
@@ -34,11 +35,13 @@ class Eos(Device):
         self.event_types = Events()
         self.about = eosAbout()
         self._about_handler = eosAboutHandler(self)
+        self.state: eosStates | None = None
 
     def connect(self) -> None:
         """Connect to the Eos device."""
         register_playback_handlers(self)
         register_about_handlers(self)
+        register_state_handlers(self)
 
         try:
             self.conn.start_listening()

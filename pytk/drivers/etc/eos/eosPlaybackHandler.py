@@ -4,6 +4,7 @@ from pyosc import OSCMessage
 
 from pytk.core.exceptions import InvalidStateError
 
+from .eosEventValidators import eosStateEventValidator
 from .eosPlaybackTypes import (
     cueType,
     eosActiveCueCompletionValidator,
@@ -21,6 +22,13 @@ if TYPE_CHECKING:
 class eosPlaybackHandler:
     def __init__(self, eos: Eos):
         self.eos = eos
+
+    def handle_state_event(self, message: eosStateEventValidator | OSCMessage) -> None:
+        """Handle state events from the Eos device."""
+        if isinstance(message, eosStateEventValidator):
+            self.eos.state = message.state
+        else:
+            raise InvalidStateError(f"Invalid state event message type: {type(message)} {message}")
 
     def handle_playback_event(
         self,
@@ -94,4 +102,12 @@ def register_playback_handlers(eos: Eos):
         message_address="/eos/out/previous/cue/*/*",
         validator=eosCuePreviousValidator,
         func=eos.playback_handler.handle_playback_event,
+    )
+
+
+def register_state_handlers(eos: Eos):
+    eos.conn.register_handler(
+        message_address="/eos/out/event/state",
+        validator=eosStateEventValidator,
+        func=eos.playback_handler.handle_state_event,
     )
