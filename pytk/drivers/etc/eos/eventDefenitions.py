@@ -21,12 +21,12 @@ class Events:
         validator=eosCmdOutValidator,
         address="/eos/out/user/*/cmd",
     )
-    eosCmdOut = eosCmdOutValidator
+    CmdMessage = eosCmdOutValidator
     eosLockedEvent = Event[eosLockEventValidator](
         event_type="EosLockEvent", validator=eosLockEventValidator, address="/eos/out/event/locked"
     )
-    eosLockedOut = eosLockEventValidator
+    LockedMessage = eosLockEventValidator
     eosShowSave = Event[eosShowSaveEventValidator](
         event_type="EosShowSaveEvent", validator=eosShowSaveEventValidator, address="/eos/out/event/show/*"
     )
-    eosShowSaveOut = eosShowSaveEventValidator
+    ShowSaveMessage = eosShowSaveEventValidator
