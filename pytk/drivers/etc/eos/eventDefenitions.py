@@ -3,7 +3,7 @@ from typing import Generic, TypeVar
 
 from pydantic import BaseModel
 
-from .eosEventValidators import eosCmdOutValidator, eosLockEventValidator
+from .eosEventValidators import eosCmdOutValidator, eosLockEventValidator, eosShowSaveEventValidator
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -26,3 +26,7 @@ class Events:
         event_type="EosLockEvent", validator=eosLockEventValidator, address="/eos/out/event/locked"
     )
     eosLockedOut = eosLockEventValidator
+    eosShowSave = Event[eosShowSaveEventValidator](
+        event_type="EosShowSaveEvent", validator=eosShowSaveEventValidator, address="/eos/out/event/show/*"
+    )
+    eosShowSaveOut = eosShowSaveEventValidator
