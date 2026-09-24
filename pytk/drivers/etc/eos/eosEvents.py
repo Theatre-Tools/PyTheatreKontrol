@@ -13,13 +13,12 @@ class eosEvents:
         """Registers an event handler for the given event type."""
         self.eos.conn.register_handler(message_address=event_type.address, validator=event_type.validator, func=handler)
 
-    def handler(self) -> Callable[[Event], None]:
+    def handler(self, event: Event) -> Callable[[Callable[[Event], None]], Callable[[Event], None]]:
         """Returns a callable that can be used to register an event handler for the given event type."""
 
-        def _handler() -> None:
+        def handler_decorator(func: Callable[[Event], None]) -> Callable[[Event], None]:
             """A callable that can be used to register an event handler for the given event type."""
-            self.eos.conn.register_handler(
-                message_address=event_type.address, validator=event_type.validator, func=self.eos.event_handler
-            )
+            self.eos.conn.register_handler(message_address=event.address, validator=event.validator, func=func)
 
-        return _handler
+            return func
+        return handler_decorator
