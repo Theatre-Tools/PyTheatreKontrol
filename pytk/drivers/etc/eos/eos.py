@@ -7,6 +7,8 @@ from pytk.drivers.etc.eos.eosExceptions import EosSyntaxError
 from pytk.lighting.control.cueControl import cueControl
 from pytk.transport import OSC
 
+from .eosAbout import eosAbout
+from .eosAboutHandler import eosAboutHandler, register_about_handlers
 from .eosDeskControls import cmdValidator, eosDeskControls
 from .eosEvents import eosEvents
 from .eosPlaybackControl import eosPlaybackControl
@@ -15,9 +17,6 @@ from .eosPlaybackTypes import (
     eosPlaybackStates,
 )
 from .eventDefenitions import Events
-
-from .eosAbout import eosAbout
-from .eosAboutHandler import eosAboutHandler
 
 
 class Eos(Device):
@@ -39,6 +38,8 @@ class Eos(Device):
     def connect(self) -> None:
         """Connect to the Eos device."""
         register_playback_handlers(self)
+        register_about_handlers(self)
+
         try:
             self.conn.start_listening()
         except Exception as e:
