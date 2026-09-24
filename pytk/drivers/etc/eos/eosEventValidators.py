@@ -150,12 +150,13 @@ class eosStateEventValidator(BaseModel):
     @property
     def state(self) -> eosStates | None:
         """Returns the state associated with the state event."""
-        if self.args[0].value == 0:
+        if self.args[0].value == 1:
             return eosStates.LIVE
-        elif self.args[0].value == 1:
+        elif self.args[0].value == 0:
             return eosStates.BLIND
         else:
             return None
+
 
 class eosLockEventValidator(BaseModel):
     """A class to validate messages from the /eos/out/event/locked address"""
