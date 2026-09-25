@@ -32,7 +32,9 @@ class _eosChannel(Channel):
     def flash(self) -> None:
         """Flash the channel."""
         ## Some of the implemtentation is borked so we bypass that with cmd
-        self._eos.cmd(f'Chan {self.channel_number} Flash #')
+        #self._eos.cmd(f'Chan {self.channel_number} Flash #')
+        self.select()
+        self._eos.keys.send_key("Flash", button_edge=False)
 
 class _eosAddress(Address):
     """A class representing an ABSOLUTE (e.g. 513 = universe 2 address 1) address in the Eos device.
@@ -75,3 +77,11 @@ class eosProgrammer(programmerControl):
     def address(self, address_number: int) -> _eosAddress:
         """Get an address object for the specified absolute address number."""
         return _eosAddress(self._eos, address_number)
+
+    def live(self) -> None:
+        """Toggle the live mode of the programmer."""
+        self._eos.keys.send_key("live", button_edge=False)
+
+    def blind(self) -> None:
+        """Toggle the blind mode of the programmer."""
+        self._eos.keys.send_key("blind", button_edge=False)
