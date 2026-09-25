@@ -17,9 +17,9 @@ class eosKeys:
         """Send a key press to the Eos device."""
         if button_edge:
             arg = OSCFloat(value=1.0)
+            self.eos.conn.send_message(OSCMessage(address=f"/eos/key/{key}", args=(arg,)))
         else:
-            arg = OSCFloat(value=0.0)
-        self.eos.conn.send_message(OSCMessage(address=f"/eos/keys/{key}", args=(arg,)))
+            self.eos.conn.send_message(OSCMessage(address=f"/eos/key/{key}", args=()))
 
     def _eos_softkey_handler(self, message: eosSoftKeyEventValidator | OSCMessage) -> None:
         """Handles soft key events from the Eos device."""
