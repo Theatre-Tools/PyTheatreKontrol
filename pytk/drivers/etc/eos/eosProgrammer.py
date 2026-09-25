@@ -1,4 +1,3 @@
-
 from typing import TYPE_CHECKING, Optional
 
 from pyosc import OSCMessage
@@ -19,6 +18,7 @@ class _eosChannel(Channel):
     def __init__(self, eos: "Eos", channel_number: int):
         self._eos = eos
         self.channel_number = channel_number
+
     def select(self) -> None:
         """Select the channel."""
         self._eos.conn.send_message(OSCMessage(address=f"/eos/chan/{self.channel_number}", args=()))
@@ -32,9 +32,10 @@ class _eosChannel(Channel):
     def flash(self) -> None:
         """Flash the channel."""
         ## Some of the implemtentation is borked so we bypass that with cmd
-        #self._eos.cmd(f'Chan {self.channel_number} Flash #')
+        # self._eos.cmd(f'Chan {self.channel_number} Flash #')
         self.select()
         self._eos.keys.send_key("Flash", button_edge=False)
+
 
 class _eosAddress(Address):
     """A class representing an ABSOLUTE (e.g. 513 = universe 2 address 1) address in the Eos device.
@@ -58,18 +59,22 @@ class _eosAddress(Address):
         """Set the value of the address (0-255)."""
         if not (0 <= value <= 255):
             raise ValueError("Value must be between 0 and 255.")
-        self._eos.conn.send_message(
-            OSCMessage(address=f"/eos/addr/{self.address_number}/dmx", args=(OSCFloat(value=value),))
-        )
+        self._eos.conn.send_message(OSCMessage(address=f"/eos/addr/{self.address_number}/dmx", args=(OSCFloat(value=value),)))
 
 
-class eosCueControl():
+class eosCueControl:
     """A class that implements the CueControl protocol for Eos devices."""
 
     def __init__(self, eos: "Eos"):
         self._eos = eos
 
-    def record_cue(self, cue: str, time: Optional[float] = None, label: Optional[str] = None, notes: Optional[str] = None) -> None:
+    def goto_cue(self, cue: str) -> None:
+        """Go to a specific cue."""
+        self._eos.conn.send_message(OSCMessage(address=f"/eos/cues/{cue}/fire", args=()))
+
+    def record_cue(
+        self, cue: str, time: Optional[float] = None, label: Optional[str] = None, notes: Optional[str] = None
+    ) -> None:
         """Record an Eos Cue
         Currently limited to recording cues in the active cue list.
 
@@ -97,6 +102,7 @@ class eosCueControl():
         if notes is not None:
             cmd += f" Notes {notes}"
         self._eos.cmd(cmd)
+
 
 class eosProgrammer(programmerControl):
     """A class representing the Eos programmer."""

@@ -5,7 +5,6 @@ from pytk.core.device import Device
 from pytk.core.exceptions import DeviceOfflineError, DriverError
 from pytk.drivers.etc.eos.eosExceptions import EosSyntaxError
 from pytk.drivers.etc.eos.eosSoftKeys import eosSK
-from pytk.lighting.control.cueControl import cueControl
 from pytk.transport import OSC
 
 from .eosAbout import eosAbout
@@ -76,18 +75,3 @@ class Eos(Device):
             raise EosSyntaxError(f"Command '{cmd.cmd}' failed with error code {cmd.args[1].value}")
         else:
             return cmd.cmd
-
-
-class EosCueControl(cueControl):
-    """A class that implements the CueControl protocol for Eos devices."""
-
-    def __init__(self, _eos: Eos):
-        self._eos = _eos
-
-    def goto_cue(self, cue: str) -> None:
-        """Go to a specific cue."""
-        self._eos.conn.send_message(OSCMessage(address=f"/eos/cues/{cue}/fire", args=()))
-
-    def record_cue(self, cue: str) -> None:
-        """Record a specific cue."""
-        self._eos.conn.send_message(OSCMessage(address="/eos/cmd", args=(OSCString(value=f"Record Cue {cue}"),)))
