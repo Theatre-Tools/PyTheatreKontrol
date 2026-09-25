@@ -1,5 +1,5 @@
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from pyosc import OSCMessage
 from pyosc.types import OSCFloat
@@ -63,12 +63,47 @@ class _eosAddress(Address):
         )
 
 
+class eosCueControl():
+    """A class that implements the CueControl protocol for Eos devices."""
+
+    def __init__(self, eos: "Eos"):
+        self._eos = eos
+
+    def record_cue(self, cue: str, time: Optional[float] = None, label: Optional[str] = None, notes: Optional[str] = None) -> None:
+        """Record an Eos Cue
+        Currently limited to recording cues in the active cue list.
+
+        Args:
+            cue (str): The cue number to record.
+            time (Optional[float], optional): the time to record the cue. Defaults to None.
+            label (Optional[str], optional): The label for the cue. Defaults to None.
+            notes (Optional[str], optional): The notes for the cue. Defaults to None.
+
+        Raises:
+            ValueError: If the cue is not a valid integer or if both notes and label are provided.
+        """
+        # There is no direct OSC endpoint for this functionality, so it will be achived through cmd and key presses mostly.
+        try:
+            int(cue)
+        except ValueError:
+            raise ValueError("Cue must be a valid integer.")
+        if notes and label:
+            raise ValueError("Cannot have both notes and label.")
+        cmd = f"Record Cue {cue}"
+        if time is not None:
+            cmd += f" Time {time}"
+        if label is not None:
+            cmd += f" Label {label}"
+        if notes is not None:
+            cmd += f" Notes {notes}"
+        self._eos.cmd(cmd)
 
 class eosProgrammer(programmerControl):
     """A class representing the Eos programmer."""
 
     def __init__(self, eos: "Eos"):
         self._eos = eos
+        self.cue_control = eosCueControl(eos)
 
     def channel(self, channel_number: int) -> _eosChannel:
         """Get a channel object for the specified channel number."""
