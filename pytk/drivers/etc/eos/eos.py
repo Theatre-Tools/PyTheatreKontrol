@@ -4,6 +4,7 @@ from pyosc.types import OSCString
 from pytk.core.device import Device
 from pytk.core.exceptions import DeviceOfflineError, DriverError
 from pytk.drivers.etc.eos.eosExceptions import EosSyntaxError
+from pytk.drivers.etc.eos.eosSoftKeys import eosSK
 from pytk.lighting.control.cueControl import cueControl
 from pytk.transport import OSC
 
@@ -12,7 +13,7 @@ from .eosAboutHandler import eosAboutHandler, register_about_handlers
 from .eosDeskControls import cmdValidator, eosDeskControls
 from .eosEvents import eosEvents
 from .eosEventValidators import eosStates
-from .eosKeys import eosKeys
+from .eosKeys import eosKeys, register_key_handlers
 from .eosPlaybackControl import eosPlaybackControl
 from .eosPlaybackHandler import eosPlaybackHandler, register_playback_handlers, register_state_handlers
 from .eosPlaybackTypes import (
@@ -38,12 +39,14 @@ class Eos(Device):
         self._about_handler = eosAboutHandler(self)
         self.state: eosStates | None = None
         self.keys = eosKeys(self)
+        self.softkeys = eosSK(self)
 
     def connect(self) -> None:
         """Connect to the Eos device."""
         register_playback_handlers(self)
         register_about_handlers(self)
         register_state_handlers(self)
+        register_key_handlers(self)
 
         try:
             self.conn.start_listening()
