@@ -19,6 +19,7 @@ from .eosPlaybackHandler import eosPlaybackHandler, register_playback_handlers, 
 from .eosPlaybackTypes import (
     eosPlaybackStates,
 )
+from .eosProgrammer import eosProgrammer
 from .eventDefenitions import Events
 
 
@@ -40,6 +41,7 @@ class Eos(Device):
         self.state: eosStates | None = None
         self.keys = eosKeys(self)
         self.softkeys = eosSK(self)
+        self.programmer = eosProgrammer(self)
 
     def connect(self) -> None:
         """Connect to the Eos device."""
