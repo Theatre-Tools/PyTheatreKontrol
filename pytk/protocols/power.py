@@ -13,14 +13,14 @@ class PowerState(Enum):
 class PowerControl(Protocol):
     """A protocol for controlling the power state of a device."""
 
-    async def power_on(self) -> None:
+    def power_on(self) -> None:
         """Turn the device on."""
         ...
 
-    async def power_off(self) -> None:
+    def power_off(self) -> None:
         """Turn the device off."""
         ...
 
-    async def get_power_state(self) -> PowerState:
+    def get_power_state(self) -> PowerState:
         """Get the current power state of the device."""
         ...
