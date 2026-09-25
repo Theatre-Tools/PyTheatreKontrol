@@ -123,7 +123,7 @@ class eosSoftKeyEventValidator(BaseModel):
     @property
     def key_text(self) -> str | None:
         """Returns the key text associated with the softkey event."""
-        return self.args[0].value if self.args else None
+        return self.args[0].value
 
 
 class eosActiveChannelEventValidator(BaseModel):
