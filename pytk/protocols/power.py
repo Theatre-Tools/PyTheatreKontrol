@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Protocol
+from typing import Any, Protocol
 
 
 class PowerState(Enum):
@@ -21,6 +21,6 @@ class PowerControl(Protocol):
         """Turn the device off."""
         ...
 
-    def get_power_state(self) -> PowerState:
+    def get_power_state(self) -> Any:
         """Get the current power state of the device."""
         ...
