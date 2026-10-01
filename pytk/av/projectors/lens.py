@@ -11,8 +11,8 @@ class ShutterStates(Enum):
     UNKNOWN = None
 
 
-class BaseLenseDriver(Protocol):
-    """Minimum interface for a projector lense driver to support."""
+class BaseLensDriver(Protocol):
+    """Minimum interface for a projector lens driver to support."""
 
     def get_zoom(self) -> float: ...
     def set_zoom(self, zoom: float) -> None: ...
@@ -22,9 +22,8 @@ class BaseLenseDriver(Protocol):
     def get_shutter_state(self) -> ShutterStates: ...
 
 
-
-class LenseShutter:
-    def __init__(self, driver: BaseLenseDriver):
+class LensShutter:
+    def __init__(self, driver: BaseLensDriver):
         self.driver = driver
 
     def open(self) -> None:
@@ -38,18 +37,18 @@ class LenseShutter:
         return self.driver.get_shutter_state()
 
     def __repr__(self) -> str:
-        return f"<LenseShutter state={self.state.value}>"
+        return f"<LensShutter state={self.state.value}>"
 
     def __call__(self) -> ShutterStates:
         return self.state
 
 
-class Lense:
-    """An abstraction for interfacing with a projector's lense."""
+class Lens:
+    """An abstraction for interfacing with a projector's lens."""
 
-    def __init__(self, driver: BaseLenseDriver):
+    def __init__(self, driver: BaseLensDriver):
         self.driver = driver
-        self.shutter = LenseShutter(driver=driver)
+        self.shutter = LensShutter(driver=driver)
 
     def set_zoom(self, zoom: float) -> None:
         if not 0.0 <= zoom <= 100:
