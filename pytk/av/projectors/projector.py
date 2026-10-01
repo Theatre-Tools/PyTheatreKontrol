@@ -1,6 +1,6 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 
-from pytk.av.projectors.projectorPower import ProjectorPowerControl, _powerState
+from pytk.av.projectors.projectorPower import ProjectorPowerControl
 from pytk.core.device import Device
 
 
@@ -12,9 +12,3 @@ class Projector(Device, ABC):
         super().__init__(name, device_id)
         self.serial_number = serial_number
         self.power = ProjectorPowerControl(projector=self)
-
-
-    @abstractmethod
-    def get_power_state(self) -> _powerState:
-        """Get the current power state of the projector."""
-        ...
