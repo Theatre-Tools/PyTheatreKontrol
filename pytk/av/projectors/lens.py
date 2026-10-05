@@ -1,6 +1,8 @@
 from enum import Enum
 from typing import TYPE_CHECKING, Protocol
 
+from pydantic import BaseModel
+
 if TYPE_CHECKING:
     pass
 
@@ -9,6 +11,14 @@ class ShutterStates(Enum):
     OPEN = False
     CLOSED = True
     UNKNOWN = None
+
+
+class LenseDetails(BaseModel):
+    make: str
+    model: str
+    serial_number: str
+    features: list[str] | None = None
+    notes: str | None = None
 
 
 class BaseLensDriver(Protocol):
@@ -46,8 +56,9 @@ class LensShutter:
 class Lens:
     """An abstraction for interfacing with a projector's lens."""
 
-    def __init__(self, driver: BaseLensDriver):
+    def __init__(self, driver: BaseLensDriver, details: LenseDetails):
         self.driver = driver
+        self.details = details
         self.shutter = LensShutter(driver=driver)
 
     def set_zoom(self, zoom: float) -> None:
