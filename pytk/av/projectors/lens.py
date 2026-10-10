@@ -28,7 +28,7 @@ class BaseLensDriver(Protocol):
     def set_zoom(self, zoom: float) -> None: ...
     def get_focus(self) -> float: ...
     def set_focus(self, focus: float) -> None: ...
-    def set_shutter(self, open_shutter: bool) -> None: ...
+    def set_shutter(self, shutter: bool) -> None: ...
     def get_shutter_state(self) -> ShutterStates: ...
 
 
@@ -37,10 +37,10 @@ class LensShutter:
         self.driver = driver
 
     def open(self) -> None:
-        self.driver.set_shutter(open_shutter=True)
+        self.driver.set_shutter(shutter=True)
 
     def close(self) -> None:
-        self.driver.set_shutter(open_shutter=False)
+        self.driver.set_shutter(shutter=False)
 
     @property
     def state(self) -> ShutterStates:
