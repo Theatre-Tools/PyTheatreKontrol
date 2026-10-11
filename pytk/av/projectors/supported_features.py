@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from .source import sourceTypes
+
 
 class supportedFeatures(BaseModel):
     """A model representing the supported features of a projector."""
@@ -9,7 +11,7 @@ class supportedFeatures(BaseModel):
     shutter: bool = False
     interchangeable_lens: bool = False
     sources: int = 1
-    source_type: str | None = None
+    source_type: sourceTypes | None = None
     resolution: str | None = None
     source_wattage: int | None = None
     inputs: list[str] | None = None
