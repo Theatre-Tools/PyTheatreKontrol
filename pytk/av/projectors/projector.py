@@ -1,7 +1,8 @@
 from abc import ABC
 
-from pytk.av.projectors.projectorPower import ProjectorPowerControl
 from pytk.core.device import Device
+
+from .projectorPower import ProjectorPowerControl
 
 
 class Projector(Device, ABC):
